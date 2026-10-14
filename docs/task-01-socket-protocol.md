@@ -1,149 +1,195 @@
-# Task 01 — Socket Protocol Design
+# Task 01 — Khảo sát yêu cầu và thiết kế giao thức Socket
 
-**Repository:** HuynhHoaAn-UIT/NT106  
-**Branch:** huynhhoa-an  
-**Status:** Protocol proposal for the next implementation tasks
+**Dự án:** Scholarship Gateway  
+**Nhánh GitHub:** huynhhoa-an  
+**Trạng thái:** Tài liệu thiết kế để nhóm dùng chung khi viết Client và Server
 
-## 1. Repository review
+## 1. Repo hiện có gì?
 
-The selected branch currently contains a C# WinForms starter: LoginForm, RegisterForm, OTPForm and MainForm. Program.cs starts LoginForm. The forms currently show local success messages; no TCP client/server or database calls are present. The project targets .NET 10 Windows Forms.
+Nhánh này hiện có ứng dụng WinForms C# với các màn hình đăng nhập, đăng ký, nhập mã OTP và màn hình chính. Khi bấm nút, chương trình mới hiện thông báo; chưa có kết nối mạng, Socket Server hay cơ sở dữ liệu.
 
-This document defines the proposed wire contract; it does not implement the server.
+Tài liệu này thống nhất cách Client và Server gửi dữ liệu cho nhau. Task 01 chỉ thiết kế giao thức, chưa viết Socket Server.
 
-## 2. Requirements inferred from the project plan
+## 2. Giao thức Socket là gì?
 
-The protocol must support TCP connections, registration and OTP verification, login/logout, heartbeat, scholarship chat and broadcast, scholarship listing/following, posts/upvotes, leaderboard queries and essay/file transfer. It must support multiple concurrent clients, detect malformed messages, avoid blocking the UI, and return errors in a consistent format.
+Có thể hình dung mỗi lần gửi dữ liệu giống như gửi một gói hàng:
 
-TCP is a byte stream. A single read may contain part of a frame or multiple frames. Both sides must read exact lengths and must not assume one Receive equals one message.
+- **Header (phần đầu):** ghi loại gói tin, độ dài dữ liệu và mã để ghép yêu cầu với phản hồi.
+- **Body (phần nội dung):** chứa dữ liệu thật, thường là JSON.
+- **TCP:** chuyển các byte giữa hai máy. TCP không giữ ranh giới từng gói tin ứng dụng, nên một lần nhận có thể chỉ lấy được một phần message, hoặc nhận liền nhiều message.
 
-## 3. Frame format
+Vì vậy, Client và Server phải đọc theo độ dài ghi trong Header, không được nghĩ rằng một lần nhận dữ liệu sẽ luôn là một message hoàn chỉnh.
 
-Each frame has a fixed 20-byte header followed by BodyLength bytes. All multi-byte integers use network byte order (big-endian).
+## 3. Những chức năng cần trao đổi dữ liệu
 
-| Offset | Bytes | Field | Definition |
+Theo danh sách task của dự án, giao thức cần hỗ trợ:
+
+- Đăng ký, xác minh OTP, đăng nhập và đăng xuất.
+- Kiểm tra kết nối định kỳ bằng heartbeat.
+- Lấy danh sách học bổng và theo dõi học bổng.
+- Gửi và nhận tin nhắn trong phòng chat của từng học bổng.
+- Tạo bài viết và bình chọn.
+- Lấy bảng xếp hạng Mentor.
+- Gửi bài luận hoặc tệp theo từng phần nhỏ.
+- Trả lỗi theo cách thống nhất để ứng dụng hiển thị cho người dùng.
+
+Các chức năng này cần được nhóm xác nhận payload cụ thể trước khi bắt đầu lập trình.
+
+## 4. Cấu trúc một message
+
+Mỗi message gồm **Header 20 byte** và **Body** ngay sau Header. Các số dài hơn một byte được ghi theo thứ tự byte mạng (big-endian).
+
+| Vị trí bắt đầu | Độ dài | Tên trường trong giao thức | Ý nghĩa dễ hiểu |
 |---:|---:|---|---|
-| 0 | 4 | Magic | ASCII SGW1 |
-| 4 | 1 | Version | 1 |
-| 5 | 1 | Flags | bit 0=response, bit 1=error, bit 2=encrypted, bit 3=binary |
-| 6 | 2 | MessageType | unsigned message code |
-| 8 | 4 | BodyLength | body byte count |
-| 12 | 8 | RequestId | request/response correlation ID |
+| 0 | 4 byte | Magic | Dấu nhận dạng, luôn là chữ SGW1 |
+| 4 | 1 byte | Version | Phiên bản giao thức, hiện tại là 1 |
+| 5 | 1 byte | Flags | Cho biết đây là phản hồi, lỗi, dữ liệu mã hóa hay dữ liệu nhị phân |
+| 6 | 2 byte | MessageType | Mã cho biết đây là loại yêu cầu nào |
+| 8 | 4 byte | BodyLength | Số byte của phần nội dung |
+| 12 | 8 byte | RequestId | Mã để ghép phản hồi với yêu cầu ban đầu |
 
-BodyLength counts bytes, not characters. No newline or terminator is used. The receiver reads exactly 20 header bytes, validates them, then reads exactly BodyLength bytes.
+**BodyLength tính bằng byte, không phải số ký tự.** Sau khi đọc đủ 20 byte Header, bên nhận kiểm tra Header rồi đọc đúng số byte BodyLength.
 
-Limits: JSON body at most 1 MiB; binary file chunk at most 64 KiB. Reject invalid magic/version, unknown mandatory message type, unsupported flags, or oversized body before allocating the body buffer. Close the connection after a framing violation.
+### Giới hạn kích thước
 
-## 4. Body format
+- Nội dung JSON: tối đa 1 MiB.
+- Mỗi phần dữ liệu của tệp: tối đa 64 KiB.
+- Nếu dấu nhận dạng, phiên bản hoặc độ dài không hợp lệ, bên nhận dừng kết nối.
+- Phải kiểm tra độ dài trước khi tạo vùng nhớ để chứa Body.
 
-Unless marked binary, body is UTF-8 JSON using camelCase. IDs are strings; timestamps are UTC ISO 8601.
+## 5. Nội dung Body
 
-Request example:
+Hầu hết Body là JSON được mã hóa UTF-8. Tên trường JSON dùng kiểu camelCase như các ví dụ dưới đây; thời gian dùng UTC.
 
-```json
-{
-  "type": "LOGIN",
-  "data": { "email": "student@example.edu", "password": "..." }
-}
-```
-
-Success response example:
+Yêu cầu đăng nhập:
 
 ```json
 {
   "type": "LOGIN",
-  "data": { "userId": "usr_123", "displayName": "Nguyen Van A", "token": "..." }
+  "data": {
+    "email": "student@example.edu",
+    "password": "..."
+  }
 }
 ```
 
-Error response example:
+Phản hồi đăng nhập thành công:
+
+```json
+{
+  "type": "LOGIN",
+  "data": {
+    "userId": "usr_123",
+    "displayName": "Nguyen Van A",
+    "token": "..."
+  }
+}
+```
+
+Phản hồi khi có lỗi:
 
 ```json
 {
   "type": "ERROR",
   "data": {
     "code": "AUTH_INVALID_CREDENTIALS",
-    "message": "Email or password is incorrect.",
+    "message": "Email hoặc mật khẩu không đúng.",
     "retryable": false
   }
 }
 ```
 
-Responses set the response flag and reuse the request's RequestId. Error responses set both response and error flags. Server-initiated messages use RequestId 0. A RequestId is unique among in-flight requests on a connection.
+Các từ như LOGIN, ERROR, email và password là tên trường/mã kỹ thuật để Client và Server dùng giống hệt nhau. Phần giải thích trong tài liệu được viết bằng tiếng Việt.
 
-## 5. Proposed MessageType registry (Protocol v1)
+## 6. Mã loại message đề xuất
 
-| Code | Name | Direction | Body summary |
-|---:|---|---|---|
-| 0x0001 | HELLO | Client → Server | protocolVersion, clientName |
-| 0x0002 | HELLO_ACK | Server → Client | protocolVersion, serverTime |
-| 0x0003 | ERROR | Either | code, message, retryable |
-| 0x0010 | REGISTER | Client → Server | name, email, password |
-| 0x0011 | REGISTER_OTP_VERIFY | Client → Server | email, otp |
-| 0x0012 | REGISTER_OTP_RESEND | Client → Server | email |
-| 0x0013 | LOGIN | Client → Server | email, password |
-| 0x0014 | LOGOUT | Client → Server | token |
-| 0x0020 / 0x0021 | PING / PONG | Client ↔ Server | empty body or timestamp |
-| 0x0030 | SCHOLARSHIP_LIST | Client → Server | filters, page, pageSize |
-| 0x0031 | SCHOLARSHIP_LIST_RESULT | Server → Client | items, page, total |
-| 0x0032 | SCHOLARSHIP_FOLLOW | Client → Server | scholarshipId |
-| 0x0040 | CHAT_SEND | Client → Server | scholarshipId, text, clientMessageId |
-| 0x0041 | CHAT_MESSAGE | Server → room members | messageId, scholarshipId, sender, text, sentAt |
-| 0x0042 / 0x0043 | CHAT_HISTORY / RESULT | Client ↔ Server | scholarshipId, cursor, items |
-| 0x0050 | POST_CREATE | Client → Server | title, content |
-| 0x0051 | POST_VOTE | Client → Server | postId, vote |
-| 0x0060 / 0x0061 | LEADERBOARD_TOP / RESULT | Client ↔ Server | scholarshipId, limit / ranked items |
-| 0x0062 / 0x0063 | LEADERBOARD_POSITION / RESULT | Client ↔ Server | scholarshipId / rank, totalScore, deltaXp |
-| 0x0070 | FILE_UPLOAD_START | Client → Server | fileName, fileSize, sha256, relatedId |
-| 0x0071 | FILE_CHUNK | Client → Server | binary chunk; chunk metadata format to be agreed |
-| 0x0072 / 0x0073 | FILE_UPLOAD_COMPLETE / RESULT | Client ↔ Server | uploadId / status |
-| 0x0080 | SESSION_REVOKED | Server → Client | reason |
+Các mã bên dưới là tên quy ước cho phiên bản giao thức 1. Client và Server phải dùng cùng mã và cùng cấu trúc dữ liệu.
 
-This registry is a proposed contract based on the task list. Feature owners must confirm payload fields before implementation. Do not reuse a code within Protocol v1 once clients depend on it.
+| Mã | Hướng gửi | Dùng để làm gì |
+|---|---|---|
+| HELLO, HELLO_ACK | Client ↔ Server | Bắt đầu kết nối và xác nhận hai bên hiểu cùng phiên bản |
+| ERROR | Hai chiều | Báo yêu cầu không hợp lệ hoặc thao tác thất bại |
+| REGISTER | Client → Server | Gửi thông tin đăng ký |
+| REGISTER_OTP_VERIFY | Client → Server | Gửi mã OTP để xác minh |
+| REGISTER_OTP_RESEND | Client → Server | Yêu cầu gửi lại OTP |
+| LOGIN, LOGOUT | Client → Server | Đăng nhập hoặc đăng xuất |
+| PING, PONG | Client ↔ Server | Kiểm tra kết nối còn hoạt động |
+| SCHOLARSHIP_LIST, SCHOLARSHIP_LIST_RESULT | Client ↔ Server | Yêu cầu và trả về danh sách học bổng |
+| SCHOLARSHIP_FOLLOW | Client → Server | Theo dõi một học bổng |
+| CHAT_SEND, CHAT_MESSAGE | Client ↔ Server | Gửi tin nhắn và phát tin tới thành viên cùng phòng |
+| CHAT_HISTORY, CHAT_HISTORY_RESULT | Client ↔ Server | Yêu cầu và trả về lịch sử chat |
+| POST_CREATE, POST_VOTE | Client → Server | Tạo bài viết và bình chọn |
+| LEADERBOARD_TOP, LEADERBOARD_RESULT | Client ↔ Server | Lấy danh sách Mentor xếp hạng cao |
+| LEADERBOARD_POSITION, LEADERBOARD_POSITION_RESULT | Client ↔ Server | Lấy thứ hạng và điểm của một Mentor |
+| FILE_UPLOAD_START | Client → Server | Báo bắt đầu gửi tệp và thông tin tệp |
+| FILE_CHUNK | Client → Server | Gửi một phần dữ liệu tệp |
+| FILE_UPLOAD_COMPLETE, FILE_UPLOAD_RESULT | Client ↔ Server | Báo gửi xong và nhận kết quả kiểm tra |
+| SESSION_REVOKED | Server → Client | Báo phiên đăng nhập đã bị thu hồi |
 
-## 6. Connection and session flow
+Tên trên là mã kỹ thuật, không phải câu tiếng Anh trong giao diện. Nhóm có thể điều chỉnh trước khi lập trình; sau khi Client và Server đã dùng, không đổi mã tùy tiện.
 
-1. Client opens the configured TCP connection and sends HELLO (header version 1).
-2. Server returns HELLO_ACK. Unsupported versions receive ERROR(PROTOCOL_VERSION_UNSUPPORTED), then disconnect.
-3. Client sends LOGIN, or REGISTER followed by OTP verification.
-4. After successful login, the client sends PING every 15 seconds and expects PONG.
-5. On logout, session revocation, timeout, or protocol error, stop heartbeat and close resources. Reconnection uses a bounded backoff; authenticate again if the session is no longer valid.
+## 7. Cách ghép yêu cầu với phản hồi
 
-Server authorization must validate that the user may access the supplied Scholarship_ID. Never trust client-provided IDs as proof of access.
+Mỗi yêu cầu có một RequestId. Phản hồi phải trả lại đúng RequestId đó để Client biết nó ứng với thao tác nào. RequestId 0 dành cho tin nhắn Server tự gửi, ví dụ tin chat mới hoặc thông báo phiên đăng nhập bị thu hồi.
 
-## 7. AES and file transfer constraints
+Trong Header, cờ response đánh dấu phản hồi. Nếu phản hồi báo lỗi thì bật thêm cờ error.
 
-Task 26 mentions AES. Do not hardcode a shared AES key in source. The team must decide secure key provisioning before enabling encrypted frames. Prefer AES-GCM with a versioned envelope containing nonce, authentication tag and ciphertext. Keep framing and correlation metadata readable. TLS is still recommended for network transport; application AES does not replace TLS or server authentication.
+## 8. Luồng kết nối cơ bản
 
-For files, send metadata with FILE_UPLOAD_START, binary chunks no larger than 64 KiB, then FILE_UPLOAD_COMPLETE. Server verifies total size and SHA-256 before success. Decide whether chunk metadata includes uploadId, chunkIndex and offset, and whether resume is required, before Task 19. Do not base64-encode large files inside JSON.
+1. Client kết nối tới địa chỉ và cổng của Server.
+2. Client gửi HELLO để báo phiên bản giao thức.
+3. Server trả HELLO_ACK nếu hỗ trợ phiên bản đó. Nếu không, Server trả ERROR rồi đóng kết nối.
+4. Client gửi LOGIN, hoặc gửi REGISTER rồi xác minh OTP.
+5. Sau khi đăng nhập, Client gửi PING mỗi 15 giây; Server trả PONG.
+6. Khi đăng xuất hoặc mất kết nối, Client dừng heartbeat và đóng Socket.
+7. Khi kết nối lại, Client đăng nhập lại nếu phiên trước không còn hiệu lực.
 
-## 8. Parser and implementation rules
+Server phải tự kiểm tra quyền của người dùng với từng Scholarship_ID. Không được tin rằng người dùng có quyền chỉ vì Client gửi ID đó lên.
 
-- Read exactly 20 header bytes and then exactly BodyLength body bytes; handle short reads and coalesced frames.
-- Validate length and flags before allocating memory.
-- Use a per-connection send queue so concurrent writes cannot interleave frame bytes.
-- Apply bounded queues and timeouts so a slow client cannot consume unbounded memory.
-- Do not log passwords, OTP values, tokens, encryption keys or file contents.
-- Marshal WinForms updates to the UI thread with Invoke/BeginInvoke.
-- Cancel read/write/heartbeat tasks and dispose the socket and buffers on disconnect.
-- Return stable error codes; never expose stack traces to the client.
+## 9. Mã hóa và gửi tệp
 
-## 9. Decisions the team must confirm
+Task 26 có yêu cầu dùng AES. Không được ghi cùng một khóa AES cố định vào mã nguồn Client và Server. Nhóm cần thống nhất cách cấp khóa trước khi bật mã hóa. Nếu dùng AES, nên dùng AES-GCM và phải có cách kiểm tra dữ liệu không bị sửa.
 
-1. Server host/port for development and demo.
-2. Whether authentication state is a token or socket-bound session, and token expiry/refresh.
-3. OTP expiry, retry limit and resend cooldown.
-4. How AES keys are provisioned.
-5. Whether chat supports attachments.
-6. Whether file uploads can resume after reconnect.
-7. Whether scholarship, post, profile and support operations use this TCP protocol or a separate HTTP API.
-8. Whether leaderboard ranking is scoped per scholarship or global.
+AES ở tầng ứng dụng không thay thế việc bảo vệ kết nối mạng bằng TLS. Không ghi mật khẩu, OTP, token hoặc khóa mã hóa vào log.
 
-These decisions do not block implementing a basic frame parser, but each must be settled before its corresponding business message is finalized.
+Khi gửi tệp:
 
-## 10. Task 01 completion criteria
+1. Client gửi FILE_UPLOAD_START kèm tên tệp, kích thước, mã kiểm tra SHA-256 và đối tượng liên quan.
+2. Client chia tệp thành các phần, mỗi phần không quá 64 KiB, rồi gửi bằng FILE_CHUNK.
+3. Client gửi FILE_UPLOAD_COMPLETE.
+4. Server kiểm tra tổng kích thước và SHA-256 rồi mới báo thành công.
 
-- Header/body framing, byte order, limits and error behavior are specified.
-- Client and server developers can implement the same parser without guessing.
-- Request correlation, server-push messages and heartbeat are defined.
-- Open protocol decisions are recorded for the team.
-- No server implementation or full database schema is included in Task 01.
+Nhóm cần thống nhất cách mỗi phần gắn với tệp nào, thứ tự phần, vị trí byte và việc có cho phép gửi tiếp sau khi mất kết nối hay không. Không nên chuyển tệp lớn thành một chuỗi base64 trong JSON.
+
+## 10. Quy tắc khi lập trình Client và Server
+
+- Đọc đủ 20 byte Header trước, sau đó mới đọc Body.
+- Có thể phải đọc nhiều lần mới đủ dữ liệu; cũng có thể một lần đọc lấy được nhiều message.
+- Kiểm tra độ dài và cờ trước khi đọc Body.
+- Không để hai luồng gửi cùng ghi vào một Socket cùng lúc, vì dữ liệu có thể bị trộn.
+- Giới hạn số dữ liệu chờ xử lý để tránh một Client chậm làm Server hết bộ nhớ.
+- Cập nhật giao diện WinForms bằng Invoke hoặc BeginInvoke, không cập nhật giao diện trực tiếp từ luồng nhận dữ liệu.
+- Khi mất kết nối, dừng việc đọc, gửi và heartbeat; sau đó đóng Socket và giải phóng bộ nhớ.
+- Khi báo lỗi cho Client, chỉ gửi mã lỗi và nội dung dễ hiểu; không gửi stack trace hoặc thông tin nhạy cảm.
+
+## 11. Việc nhóm cần thống nhất tiếp
+
+1. Địa chỉ và cổng Server dùng khi phát triển và trình diễn.
+2. Sau đăng nhập, Server trả token hay giữ phiên theo kết nối Socket?
+3. OTP hết hạn sau bao lâu, được nhập sai bao nhiêu lần và gửi lại sau bao lâu?
+4. Khóa AES được tạo và chuyển cho Client như thế nào?
+5. Chat có gửi tệp đính kèm không?
+6. Có cần tiếp tục gửi tệp từ phần đang dang dở sau khi kết nối lại không?
+7. Danh sách học bổng, bài viết, hồ sơ Mentor và hỗ trợ dùng Socket hay một giao diện HTTP riêng?
+8. Bảng xếp hạng tính riêng theo từng học bổng hay tính chung?
+
+Các câu hỏi này không cản trở việc làm bộ đọc Header cơ bản. Tuy nhiên, cần trả lời trước khi chốt dữ liệu cụ thể cho từng chức năng.
+
+## 12. Khi nào Task 01 được xem là xong?
+
+- Nhóm biết cách đóng khung và đọc một message TCP.
+- Các trường Header, giới hạn kích thước và cách báo lỗi đã được ghi rõ.
+- Client và Server biết cách ghép phản hồi với yêu cầu.
+- Heartbeat và tin nhắn Server chủ động đã được mô tả.
+- Những điểm chưa thống nhất đã được liệt kê để nhóm quyết định.
+- Chưa bao gồm code Socket Server hay thiết kế đầy đủ cơ sở dữ liệu.
