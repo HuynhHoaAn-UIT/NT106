@@ -1,13 +1,51 @@
-﻿<Window x:Class="GlobalSuccess.Desktop.MainWindow"
+﻿<Window x:Class="GlobalSuccess.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GlobalSuccess.Desktop"
-        mc:Ignorable="d"
+        xmlns:local="clr-namespace:GlobalSuccess"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
 
-    </Grid>
+    <Window.Resources>
+        <SolidColorBrush x:Key="BrushPrimary" Color="#FF0078D7"/>
+    </Window.Resources>
+
+    <Border Background="{StaticResource BrushPrimary}">
+        <Grid Background="{StaticResource BrushBackground}"
+              Margin="30">
+
+            <StackPanel VerticalAlignment="Center">
+
+                <!-- Suez One -->
+                <TextBlock Text="GLOBAL SUCCESS"
+                           Style="{StaticResource TextBrand}"
+                           Margin="0,0,0,20"/>
+
+                <!-- Inter -->
+                <TextBlock Text="Welcome back!"
+                           Style="{StaticResource TextDisplay}"
+                           Margin="0,0,0,10"/>
+
+                <TextBlock Text="Find your opportunities and build your future."
+                           Style="{StaticResource TextBody}"
+                           Margin="0,0,0,15"/>
+
+                <!-- Inter Italic -->
+                <TextBlock Text="Your journey starts here."
+                           Style="{StaticResource TextItalic}"
+                           Margin="0,0,0,20"/>
+
+                <!-- Tilt Warp -->
+                <Border Background="{StaticResource BrushPrimary}"
+                        CornerRadius="8"
+                        Padding="20,12"
+                        HorizontalAlignment="Left">
+
+                    <TextBlock Text="GET STARTED"
+                               Style="{StaticResource TextCTA}"/>
+
+                </Border>
+
+            </StackPanel>
+
+        </Grid>
+    </Border>
 </Window>
-Background="{StaticResource BrushBackground}"

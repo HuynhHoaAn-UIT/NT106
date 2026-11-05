@@ -8,4 +8,23 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Fonts\Inter-Italic-VariableFont_opsz,wght.ttf" />
+    <None Remove="Assets\Fonts\Inter-VariableFont_opsz,wght.ttf" />
+    <None Remove="Assets\Fonts\SuezOne-Regular.ttf" />
+    <None Remove="Assets\Fonts\TiltWarp-Regular-VariableFont_XROT,YROT.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\Inter-VariableFont_opsz,wght.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\SuezOne-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\TiltWarp-Regular-VariableFont_XROT,YROT.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>
