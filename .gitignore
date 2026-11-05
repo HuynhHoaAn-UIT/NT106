@@ -1,4 +1,45 @@
+
+# Visual Studio
 .vs/
-bin/
-obj/
-*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Visual Studio generated files
+*.cache
+*.pdb
+*.log
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Publish output
+publish/
+artifacts/
+
+# Local configuration / secrets
+appsettings.Local.json
+.env
+.env.*
+!.env.example
