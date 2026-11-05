@@ -1,9 +1,6 @@
 ﻿<Application x:Class="GlobalSuccess.Desktop.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
@@ -12,13 +9,14 @@
 
             <ResourceDictionary.MergedDictionaries>
 
-                <!-- 1. COLOR SYSTEM -->
-                <ResourceDictionary
-                    Source="Resources/Colors.xaml"/>
+                <!-- 1. COLORS -->
+                <ResourceDictionary Source="Resources/Colors.xaml"/>
 
-                <!-- 2. TYPOGRAPHY SYSTEM -->
-                <ResourceDictionary
-                    Source="Resources/Typography.xaml"/>
+                <!-- 2. TYPOGRAPHY -->
+                <ResourceDictionary Source="Resources/Typography.xaml"/>
+
+                <!-- 3. BUTTONS -->
+                <ResourceDictionary Source="Resources/Buttons.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 

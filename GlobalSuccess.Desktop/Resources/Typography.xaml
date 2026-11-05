@@ -2,20 +2,30 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ===================================== -->
-    <!-- 1. FONT FAMILIES                       -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- FONT FAMILIES                     -->
+    <!-- ================================= -->
 
-    <FontFamily x:Key="FontInter">pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Inter</FontFamily>
+    <FontFamily x:Key="FontInter">
+        pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Inter
+    </FontFamily>
 
-    <FontFamily x:Key="FontSuezOne">pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Suez One</FontFamily>
+    <FontFamily x:Key="FontInterItalic">
+        pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Inter
+    </FontFamily>
 
-    <FontFamily x:Key="FontTiltWarp">pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Tilt Warp</FontFamily>
+    <FontFamily x:Key="FontSuezOne">
+        pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Suez One
+    </FontFamily>
+
+    <FontFamily x:Key="FontTiltWarp">
+        pack://application:,,,/GlobalSuccess.Desktop;component/Assets/Fonts/#Tilt Warp
+    </FontFamily>
 
 
-    <!-- ===================================== -->
-    <!-- 2. BRAND TYPOGRAPHY                    -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- BRAND TYPOGRAPHY                  -->
+    <!-- ================================= -->
 
     <Style x:Key="TextBrand"
            TargetType="{x:Type TextBlock}">
@@ -23,9 +33,7 @@
         <Setter Property="FontFamily"
                 Value="{StaticResource FontSuezOne}"/>
 
-        <Setter Property="FontSize" Value="28"/>
-
-        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="26"/>
 
         <Setter Property="Foreground"
                 Value="{StaticResource BrushPrimary}"/>
@@ -33,19 +41,17 @@
     </Style>
 
 
-    <!-- ===================================== -->
-    <!-- 3. DISPLAY TYPOGRAPHY                  -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- DISPLAY TYPOGRAPHY                -->
+    <!-- ================================= -->
 
     <Style x:Key="TextDisplay"
            TargetType="{x:Type TextBlock}">
 
         <Setter Property="FontFamily"
-                Value="{StaticResource FontInter}"/>
+                Value="{StaticResource FontSuezOne}"/>
 
         <Setter Property="FontSize" Value="36"/>
-
-        <Setter Property="FontWeight" Value="Bold"/>
 
         <Setter Property="Foreground"
                 Value="{StaticResource BrushTextPrimary}"/>
@@ -53,9 +59,9 @@
     </Style>
 
 
-    <!-- ===================================== -->
-    <!-- 4. HEADING TYPOGRAPHY                  -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- HEADINGS                          -->
+    <!-- ================================= -->
 
     <Style x:Key="TextHeading1"
            TargetType="{x:Type TextBlock}">
@@ -105,9 +111,9 @@
     </Style>
 
 
-    <!-- ===================================== -->
-    <!-- 5. BODY TYPOGRAPHY                     -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- BODY                              -->
+    <!-- ================================= -->
 
     <Style x:Key="TextBody"
            TargetType="{x:Type TextBlock}">
@@ -116,8 +122,6 @@
                 Value="{StaticResource FontInter}"/>
 
         <Setter Property="FontSize" Value="14"/>
-
-        <Setter Property="FontWeight" Value="Normal"/>
 
         <Setter Property="Foreground"
                 Value="{StaticResource BrushTextPrimary}"/>
@@ -141,6 +145,10 @@
     </Style>
 
 
+    <!-- ================================= -->
+    <!-- CAPTION                           -->
+    <!-- ================================= -->
+
     <Style x:Key="TextCaption"
            TargetType="{x:Type TextBlock}">
 
@@ -149,37 +157,35 @@
 
         <Setter Property="FontSize" Value="12"/>
 
-        <Setter Property="FontWeight" Value="Normal"/>
-
         <Setter Property="Foreground"
                 Value="{StaticResource BrushTextHint}"/>
 
     </Style>
 
 
-    <!-- ===================================== -->
-    <!-- 6. ITALIC TYPOGRAPHY                   -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- ITALIC                            -->
+    <!-- ================================= -->
 
     <Style x:Key="TextItalic"
            TargetType="{x:Type TextBlock}">
 
         <Setter Property="FontFamily"
-                Value="{StaticResource FontInter}"/>
+                Value="{StaticResource FontInterItalic}"/>
 
         <Setter Property="FontSize" Value="14"/>
 
         <Setter Property="FontStyle" Value="Italic"/>
 
         <Setter Property="Foreground"
-                Value="{StaticResource BrushTextPrimary}"/>
+                Value="{StaticResource BrushTextSecondary}"/>
 
     </Style>
 
 
-    <!-- ===================================== -->
-    <!-- 7. CTA TYPOGRAPHY                      -->
-    <!-- ===================================== -->
+    <!-- ================================= -->
+    <!-- CTA                               -->
+    <!-- ================================= -->
 
     <Style x:Key="TextCTA"
            TargetType="{x:Type TextBlock}">
@@ -188,8 +194,6 @@
                 Value="{StaticResource FontTiltWarp}"/>
 
         <Setter Property="FontSize" Value="14"/>
-
-        <Setter Property="FontWeight" Value="Normal"/>
 
         <Setter Property="Foreground" Value="White"/>
 
