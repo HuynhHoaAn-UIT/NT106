@@ -17,7 +17,8 @@
 
                 <!-- 3. BUTTONS -->
                 <ResourceDictionary Source="Resources/Buttons.xaml"/>
-
+                <ResourceDictionary Source="Resources/Inputs.xaml"/>
+                <ResourceDictionary Source="Resources/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
