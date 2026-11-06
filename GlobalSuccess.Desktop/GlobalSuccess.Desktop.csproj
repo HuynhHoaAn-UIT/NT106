@@ -1,0 +1,51 @@
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <!-- FONT RESOURCES -->
+    <ItemGroup>
+
+        <None Remove="Assets\Fonts\**\*.ttf" />
+
+        <Resource Include="Assets\Fonts\**\*.ttf" />
+
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Assets\Icons\Biểu tượng hoàn tất.svg" />
+      <None Remove="Assets\Icons\bookmark.svg" />
+      <None Remove="Assets\Icons\campus.svg" />
+      <None Remove="Assets\Icons\ChevronDown.svg" />
+      <None Remove="Assets\Icons\circle-help.svg" />
+      <None Remove="Assets\Icons\compass.svg" />
+      <None Remove="Assets\Icons\logo.png" />
+      <None Remove="Assets\Icons\Ảnh đại diện.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="SharpVectors.Wpf" Version="1.8.6" />
+    </ItemGroup>
+    <ItemGroup>
+      <Resource Include="Assets\Icons\Biểu tượng hoàn tất.svg" />
+      <Resource Include="Assets\Icons\find.svg" />
+      <Resource Include="Assets\Icons\bookmark.svg" />
+      <Resource Include="Assets\Icons\campus.svg" />
+      <Resource Include="Assets\Icons\ChevronDown.svg" />
+      <Resource Include="Assets\Icons\circle-help.svg" />
+      <Resource Include="Assets\Icons\compass.svg" />
+      <Resource Include="Assets\Icons\setting.svg" />
+      <Resource Include="Assets\Icons\community.svg" />
+      <Resource Include="Assets\Icons\logo.png" />
+      <Resource Include="Assets\Icons\bell.svg" />
+      <Resource Include="Assets\Icons\message.svg" />
+      <Resource Include="Assets\Icons\account.svg" />
+      <Resource Include="Assets\Icons\log_out.svg" />
+      <Resource Include="Assets\Icons\Ảnh đại diện.png" />
+    </ItemGroup>
+
+</Project>
