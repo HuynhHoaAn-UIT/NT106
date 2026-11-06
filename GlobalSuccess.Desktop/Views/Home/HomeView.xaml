@@ -600,7 +600,7 @@
 
                             <svgc:SvgViewbox
                                 Grid.Column="0"
-                                Source="/Assets/Icons/Biểu tượng tìm kiếm.svg"
+                                Source="/Assets/Icons/find.svg"
                                 Width="15"
                                 Height="15"
                                 HorizontalAlignment="Center"
