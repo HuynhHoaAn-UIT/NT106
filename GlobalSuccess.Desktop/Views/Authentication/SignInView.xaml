@@ -391,8 +391,8 @@
                                Foreground="{StaticResource SecondaryText}"
                                Margin="0,0,0,7"/>
 
-                    <TextBox Style="{StaticResource SignInTextBoxStyle}"
-                             Text="Loisbecket@gmail.com"
+                    <TextBox x:Name="txtEmail"
+                             Style="{StaticResource SignInTextBoxStyle}"
                              Margin="0,0,0,32"/>
 
 
@@ -412,7 +412,8 @@
                                 BorderThickness="1"
                                 CornerRadius="8"/>
 
-                        <PasswordBox Style="{StaticResource SignInPasswordBoxStyle}"
+                        <PasswordBox x:Name="txtPassword"
+                                     Style="{StaticResource SignInPasswordBoxStyle}"
                                      Margin="0,0,42,0"/>
 
                         <!-- Eye icon placeholder -->
@@ -439,7 +440,7 @@
                     <!-- SIGN IN BUTTON -->
 
                     <Button Content="Đăng nhập"
-                            Style="{StaticResource PrimaryButtonStyle}"/>
+                            Style="{StaticResource PrimaryButtonStyle}" Click="BtnSignIn_Click"/>
 
 
                     <!-- REGISTER LINK -->
