@@ -7,7 +7,7 @@ namespace GlobalSuccess.Desktop.Services
     {
         public static HttpClient Http { get; } = new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:5000/") // Địa chỉ chạy của GlobalSuccess.Api
+            BaseAddress = new Uri("http://localhost:5116/") // Địa chỉ chạy của GlobalSuccess.Api
         };
 
         public static string? SavedToken { get; private set; }

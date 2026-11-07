@@ -34,7 +34,9 @@
       <Resource Include="Assets\Icons\Biểu tượng hoàn tất.svg" />
       <Resource Include="Assets\Icons\find.svg" />
       <Resource Include="Assets\Icons\bookmark.svg" />
-      <Resource Include="Assets\Icons\campus.svg" />
+      <Resource Include="Assets\Icons\campus.svg">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icons\ChevronDown.svg" />
       <Resource Include="Assets\Icons\circle-help.svg" />
       <Resource Include="Assets\Icons\compass.svg" />

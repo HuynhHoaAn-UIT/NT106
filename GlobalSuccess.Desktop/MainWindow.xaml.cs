@@ -1,24 +1,26 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using GlobalSuccess.Desktop.Views.Authentication;
 
 namespace GlobalSuccess.Desktop
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        // Cho phép các màn hình con gọi chuyển trang dễ dàng
+        public static MainWindow? Instance { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            Instance = this;
+
+            // Mặc định khi mở ứng dụng sẽ hiện màn hình signin
+            NavigateTo(new SignInView());
+        }
+
+        public void NavigateTo(UserControl view)
+        {
+            MainContent.Content = view;
         }
     }
 }
