@@ -280,16 +280,16 @@
                     <TextBlock Text="Họ và tên"
                                Style="{StaticResource FieldLabelStyle}"/>
 
-                    <TextBox Style="{StaticResource SignUpTextBoxStyle}"
-                             Text="Lois Becket"
+                    <TextBox x:Name="txtFullName"
+                             Style="{StaticResource SignUpTextBoxStyle}"
                              Margin="0,0,0,26"/>
 
                     <!-- EMAIL -->
                     <TextBlock Text="Email"
                                Style="{StaticResource FieldLabelStyle}"/>
 
-                    <TextBox Style="{StaticResource SignUpTextBoxStyle}"
-                             Text="Loisbecket@gmail.com"
+                    <TextBox x:Name="txtEmail"
+                             Style="{StaticResource SignUpTextBoxStyle}"
                              Margin="0,0,0,26"/>
 
                     <!-- DATE OF BIRTH -->
@@ -299,7 +299,6 @@
                     <Grid Height="46" Margin="0,0,0,26">
 
                         <TextBox Style="{StaticResource SignUpTextBoxStyle}"
-                                 Text="18/03/2024"
                                  Padding="14,0,42,0"/>
 
                         <TextBlock Text="▦"
@@ -351,7 +350,7 @@
 
                             <!-- PHONE INPUT -->
                             <TextBox Grid.Column="1"
-                                     Text="(454) 726-0592"
+                                     Text=""
                                      BorderThickness="0"
                                      Background="Transparent"
                                      FontFamily="Inter"
@@ -373,7 +372,8 @@
                                 BorderThickness="1"
                                 CornerRadius="8"/>
 
-                        <PasswordBox Style="{StaticResource SignUpPasswordBoxStyle}"
+                        <PasswordBox x:Name="txtPassword"
+                                     Style="{StaticResource SignUpPasswordBoxStyle}"
                                      Margin="0,0,42,0"/>
 
                         <TextBlock Text="◉"
@@ -387,7 +387,8 @@
                     <!-- SIGN UP BUTTON -->
                     <Button Content="Đăng ký"
                             Style="{StaticResource PrimaryButtonStyle}"
-                            Margin="0,0,0,25"/>
+                            Margin="0,0,0,25" 
+                            Click="BtnSignUp_Click"/>
 
                     <!-- LOGIN LINK -->
                     <StackPanel Orientation="Horizontal"
@@ -403,7 +404,8 @@
                                 Style="{StaticResource TextButtonStyle}"
                                 FontWeight="Bold"
                                 FontSize="12"
-                                Padding="7,0,0,0"/>
+                                Padding="7,0,0,0"
+                                Click="BtnGoToSignIn_Click"/>
                     </StackPanel>
 
                 </StackPanel>

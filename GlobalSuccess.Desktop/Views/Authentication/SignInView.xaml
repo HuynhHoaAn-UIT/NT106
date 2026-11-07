@@ -459,7 +459,8 @@
                                 Style="{StaticResource TextButtonStyle}"
                                 FontWeight="Bold"
                                 FontSize="12"
-                                Padding="7,0,0,0"/>
+                                Padding="7,0,0,0"
+                                Click="BtnGoToSignUp_Click"/>
 
                     </StackPanel>
 

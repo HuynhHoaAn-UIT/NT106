@@ -11,7 +11,10 @@ namespace GlobalSuccess.Desktop.Views.Authentication
         {
             InitializeComponent();
         }
-
+        private void BtnGoToSignUp_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance?.NavigateTo(new SignUpView());
+        }
         // Sự kiện khi bấm nút Đăng nhập
         private async void BtnSignIn_Click(object sender, RoutedEventArgs e)
         {
