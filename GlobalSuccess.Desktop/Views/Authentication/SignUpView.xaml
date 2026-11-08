@@ -282,7 +282,16 @@
 
                     <TextBox x:Name="txtFullName"
                              Style="{StaticResource SignUpTextBoxStyle}"
-                             Margin="0,0,0,26"/>
+                             Margin="0,0,0,4"/>
+
+                    <!-- LOI HO TEN -->
+                    <TextBlock x:Name="txtErrorFullName"
+                               Text=""
+                               Foreground="#E53935"
+                               FontSize="11"
+                               FontFamily="Inter"
+                               Margin="0,0,0,14"
+                               Visibility="Collapsed"/>
 
                     <!-- EMAIL -->
                     <TextBlock Text="Email"
@@ -290,18 +299,25 @@
 
                     <TextBox x:Name="txtEmail"
                              Style="{StaticResource SignUpTextBoxStyle}"
-                             Margin="0,0,0,26"/>
+                             Margin="0,0,0,4"/>
+
+                    <!-- LOI EMAIL -->
+                    <TextBlock x:Name="txtErrorEmail"
+                               Text=""
+                               Foreground="#E53935"
+                               FontSize="11"
+                               FontFamily="Inter"
+                               Margin="0,0,0,14"
+                               Visibility="Collapsed"/>
 
                     <!-- DATE OF BIRTH -->
                     <TextBlock Text="Ngày sinh"
                                Style="{StaticResource FieldLabelStyle}"/>
 
                     <Grid Height="46" Margin="0,0,0,26">
-
                         <TextBox Style="{StaticResource SignUpTextBoxStyle}"
                                  Padding="14,0,42,0"/>
-
-                        <TextBlock Text="▦"
+                        <TextBlock Text="&#9638;"
                                    FontSize="17"
                                    Foreground="#94A3B8"
                                    HorizontalAlignment="Right"
@@ -318,15 +334,12 @@
                             BorderBrush="{StaticResource InputBorder}"
                             BorderThickness="1"
                             CornerRadius="8"
-                            Margin="0,0,0,26">
-
+                            Margin="0,0,0,4">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="105"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-
-                            <!-- COUNTRY CODE -->
                             <ComboBox Grid.Column="0"
                                       SelectedIndex="0"
                                       BorderThickness="0"
@@ -335,21 +348,18 @@
                                       FontSize="12"
                                       VerticalContentAlignment="Center"
                                       Margin="8,0,0,0">
-
-                                <ComboBoxItem Content="🇻🇳  +84"/>
-                                <ComboBoxItem Content="🇺🇸  +1"/>
-                                <ComboBoxItem Content="🇯🇵  +81"/>
-                                <ComboBoxItem Content="🇨🇦  +1"/>
+                                <ComboBoxItem Content="VN  +84"/>
+                                <ComboBoxItem Content="US  +1"/>
+                                <ComboBoxItem Content="JP  +81"/>
+                                <ComboBoxItem Content="CA  +1"/>
                             </ComboBox>
-
                             <Border Grid.Column="0"
                                     Width="1"
                                     Background="#E2E8F0"
                                     HorizontalAlignment="Right"
                                     Margin="0,9,0,9"/>
-
-                            <!-- PHONE INPUT -->
-                            <TextBox Grid.Column="1"
+                            <TextBox x:Name="txtPhone"
+                                     Grid.Column="1"
                                      Text=""
                                      BorderThickness="0"
                                      Background="Transparent"
@@ -361,35 +371,114 @@
                         </Grid>
                     </Border>
 
+                    <!-- LOI SO DIEN THOAI -->
+                    <TextBlock x:Name="txtErrorPhone"
+                               Text=""
+                               Foreground="#E53935"
+                               FontSize="11"
+                               FontFamily="Inter"
+                               Margin="0,0,0,14"
+                               Visibility="Collapsed"/>
+
                     <!-- PASSWORD -->
                     <TextBlock Text="Đặt mật khẩu"
                                Style="{StaticResource FieldLabelStyle}"/>
 
-                    <Grid Height="46" Margin="0,0,0,24">
-
+                    <Grid Height="46" Margin="0,0,0,6">
                         <Border Background="White"
                                 BorderBrush="{StaticResource InputBorder}"
                                 BorderThickness="1"
                                 CornerRadius="8"/>
-
                         <PasswordBox x:Name="txtPassword"
                                      Style="{StaticResource SignUpPasswordBoxStyle}"
                                      Margin="0,0,42,0"/>
-
-                        <TextBlock Text="◉"
+                        <TextBox x:Name="txtPasswordVisible"
+                                 Height="46"
+                                 Padding="14,0"
+                                 FontFamily="Inter"
+                                 FontSize="13"
+                                 Foreground="#0F172A"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,0,42,0"
+                                 Visibility="Collapsed"/>
+                        <TextBlock x:Name="iconTogglePassword"
+                                   Text="&#128065;"
                                    FontSize="16"
                                    Foreground="#94A3B8"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,15,0"/>
+                                   Margin="0,0,15,0"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="IconTogglePassword_MouseLeftButtonDown"/>
                     </Grid>
 
-                    <!-- SIGN UP BUTTON -->
-                    <Button Content="Đăng ký"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            Margin="0,0,0,25" 
-                            Click="BtnSignUp_Click"/>
+                    <!-- THANH DO MANH MAT KHAU -->
+                    <StackPanel x:Name="panelPasswordStrength"
+                                Orientation="Horizontal"
+                                Margin="0,0,0,10"
+                                Visibility="Collapsed">
+                        <Rectangle x:Name="rect1" Width="40" Height="4" RadiusX="2" RadiusY="2" Fill="#E2E8F0" Margin="0,0,4,0"/>
+                        <Rectangle x:Name="rect2" Width="40" Height="4" RadiusX="2" RadiusY="2" Fill="#E2E8F0" Margin="0,0,4,0"/>
+                        <Rectangle x:Name="rect3" Width="40" Height="4" RadiusX="2" RadiusY="2" Fill="#E2E8F0" Margin="0,0,8,0"/>
+                        <TextBlock x:Name="txtStrengthLabel"
+                                   Text="Yeu"
+                                   FontSize="11"
+                                   FontFamily="Inter"
+                                   Foreground="#E53935"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
 
+                    <!-- XAC NHAN MAT KHAU -->
+                    <TextBlock Text="Xác nhận mật khẩu"
+                               Style="{StaticResource FieldLabelStyle}"/>
+
+                    <Grid Height="46" Margin="0,0,0,4">
+                        <Border Background="White"
+                                BorderBrush="{StaticResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="8"/>
+                        <PasswordBox x:Name="txtConfirmPassword"
+                                     Style="{StaticResource SignUpPasswordBoxStyle}"
+                                     Margin="0,0,42,0"/>
+                        <TextBox x:Name="txtConfirmPasswordVisible"
+                                 Height="46"
+                                 Padding="14,0"
+                                 FontFamily="Inter"
+                                 FontSize="13"
+                                 Foreground="#0F172A"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,0,42,0"
+                                 Visibility="Collapsed"/>
+                        <TextBlock x:Name="iconToggleConfirmPassword"
+                                   Text="&#128065;"
+                                   FontSize="16"
+                                   Foreground="#94A3B8"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,15,0"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="IconToggleConfirmPassword_MouseLeftButtonDown"/>
+                    </Grid>
+
+                    <!-- LOI MAT KHAU / XAC NHAN -->
+                    <TextBlock x:Name="txtErrorPassword"
+                               Text=""
+                               Foreground="#E53935"
+                               FontSize="11"
+                               FontFamily="Inter"
+                               Margin="0,0,0,16"
+                               Visibility="Collapsed"/>
+
+                    <!-- SIGN UP BUTTON -->
+                    <Button x:Name="btnSignUp"
+                            Content="Đăng ký"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="0,0,0,25"
+                            Click="BtnSignUp_Click"/>
                     <!-- LOGIN LINK -->
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center">
@@ -400,7 +489,7 @@
                                    Foreground="{StaticResource SecondaryText}"
                                    VerticalAlignment="Center"/>
 
-                        <Button Content="Đăng nhập"
+                        <Button Content=" Đăng nhập"
                                 Style="{StaticResource TextButtonStyle}"
                                 FontWeight="Bold"
                                 FontSize="12"
