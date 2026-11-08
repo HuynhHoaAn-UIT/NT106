@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Windows;
 using System.Windows.Controls;
 using GlobalSuccess.Desktop.Services;
@@ -41,8 +41,13 @@ namespace GlobalSuccess.Desktop.Views.Authentication
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Đăng ký thành công! Hãy chuyển sang Đăng nhập.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                    txtPassword.Clear();
+                    if (MainWindow.Instance == null)
+                    {
+                        MessageBox.Show("Instance là NULL!", "Debug");
+                        return;
+                    }
+                    MainWindow.Instance.NavigateTo(new SignInView());
+                    MessageBox.Show("Đăng ký thành công!", "Debug");
                 }
                 else
                 {
