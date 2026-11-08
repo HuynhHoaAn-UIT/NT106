@@ -87,6 +87,29 @@ namespace GlobalSuccess.Desktop.Views.Authentication
                 iconToggleConfirmPassword.Foreground = new SolidColorBrush(Color.FromRgb(0x94, 0xA3, 0xB8));
             }
         }
+        // Calendar 
+        private void BtnCalendar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DateTime.TryParseExact(txtDob.Text.Trim(), "dd/MM/yyyy",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out DateTime parsedDate))
+            {
+                calendarDob.DisplayDate = parsedDate;
+                calendarDob.SelectedDate = parsedDate;
+            }
+
+            popupCalendar.IsOpen = true;
+        }
+
+        private void CalendarDob_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (calendarDob.SelectedDate.HasValue)
+            {
+                txtDob.Text = calendarDob.SelectedDate.Value.ToString("dd/MM/yyyy");
+                popupCalendar.IsOpen = false;
+            }
+        }
+
         // ĐIỀU HƯỚNG
         private void BtnGoToSignIn_Click(object sender, RoutedEventArgs e)
         {

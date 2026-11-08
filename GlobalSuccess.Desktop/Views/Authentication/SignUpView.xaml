@@ -315,14 +315,32 @@
                                Style="{StaticResource FieldLabelStyle}"/>
 
                     <Grid Height="46" Margin="0,0,0,26">
-                        <TextBox Style="{StaticResource SignUpTextBoxStyle}"
+                        <TextBox x:Name="txtDob"
+                                 Style="{StaticResource SignUpTextBoxStyle}"
                                  Padding="14,0,42,0"/>
-                        <TextBlock Text="&#9638;"
+                        <TextBlock x:Name="btnCalendar"
+                                   Text="&#9638;"
                                    FontSize="17"
                                    Foreground="#94A3B8"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,14,0"/>
+                                   Margin="0,0,14,0"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="BtnCalendar_MouseLeftButtonDown"/>
+                        <Popup x:Name="popupCalendar"
+                               PlacementTarget="{Binding ElementName=btnCalendar}"
+                               Placement="Bottom"
+                               StaysOpen="False"
+                               AllowsTransparency="True">
+                            <Border Background="White"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="5">
+                                <Calendar x:Name="calendarDob"
+                                          SelectedDatesChanged="CalendarDob_SelectedDatesChanged"/>
+                            </Border>
+                        </Popup>
                     </Grid>
 
                     <!-- PHONE NUMBER -->
