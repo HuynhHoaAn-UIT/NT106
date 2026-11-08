@@ -60,6 +60,11 @@ namespace GlobalSuccess.Desktop.Views.Authentication
                 MessageBox.Show($"Không thể kết nối đến Server API: {ex.Message}", "Lỗi mạng", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void BtnForgotPassword_Click(object sender, RoutedEventArgs e)
+        {
+            // Chuyển sang màn hình Quên mật khẩu
+            MainWindow.Instance?.NavigateTo(new ForgotPasswordView());
+        }
     }
 
     // Khai báo model nhận dữ liệu Token từ API trả về
