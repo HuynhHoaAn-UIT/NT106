@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using MySqlConnector;
-using Dapper;
+﻿using Dapper;
 using GlobalSuccess.Api.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using MySqlConnector;
 
 namespace GlobalSuccess.Api.Controllers
 {
@@ -13,6 +14,8 @@ namespace GlobalSuccess.Api.Controllers
         private readonly IConfiguration _config;
         private readonly JwtTokenService _jwtService;
         private readonly string _connectionString;
+        // Danh sách lưu tạm các mã OTP trong RAM
+        private static List<OtpRecord> _otpList = new List<OtpRecord>();
 
         public AuthController(IConfiguration config, JwtTokenService jwtService)
         {
@@ -97,6 +100,108 @@ namespace GlobalSuccess.Api.Controllers
             var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
             return Ok(new { message = $"Xin chào {userEmail}, bạn đã gửi JWT Token chính xác!" });
         }
+        // 4. API GỬI MÃ OTP: POST /api/auth/forgot-password
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+                return BadRequest("Vui lòng nhập Email.");
+
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            // Kiểm tra email có trong bảng Users chưa
+            string checkSql = "SELECT COUNT(1) FROM Users WHERE email = @Email";
+            int exists = await connection.ExecuteScalarAsync<int>(checkSql, new { request.Email });
+            if (exists == 0)
+                return NotFound("Email này chưa được đăng ký trong hệ thống.");
+
+            // Sinh mã OTP ngẫu nhiên 6 chữ số (từ 100000 đến 999999)
+            string otp = Random.Shared.Next(100000, 999999).ToString();
+
+            //Tìm xem email này đã có trong danh sách chưa
+            var daCo = _otpList.FirstOrDefault(x => x.Email == request.Email);
+
+            if (daCo != null)
+            {
+                // ĐÃ CÓ: Chỉ cần cập nhật đè mã OTP mới và giờ hết hạn mới
+                daCo.Otp = otp;
+                daCo.ExpireTime = DateTime.Now.AddMinutes(5);
+            }
+            else
+            {
+                // CHƯA CÓ: Tạo một phiếu mới và thêm vào danh sách
+                OtpRecord phieuMoi = new OtpRecord();
+                phieuMoi.Email = request.Email;
+                phieuMoi.Otp = otp;
+                phieuMoi.ExpireTime = DateTime.Now.AddMinutes(5);
+
+                _otpList.Add(phieuMoi);
+            }
+
+            // In mã OTP ra màn hình Console Server để bạn nhìn thấy và test
+            Console.WriteLine("==================================================");
+            Console.WriteLine($"[OTP QUÊN MẬT KHẨU] Email: {request.Email} -> MÃ OTP: {otp}");
+            Console.WriteLine("==================================================");
+
+            return Ok("Mã xác thực OTP đã được gửi!");
+        }
+
+        // 5. API KIỂM TRA MÃ OTP: POST /api/auth/verify-otp
+        [HttpPost("verify-otp")]
+        public IActionResult VerifyOtp([FromBody] VerifyOtpRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Otp))
+                return BadRequest("Email và Mã OTP không được để trống.");
+
+            // Tìm xem email này có mã OTP nào trong danh sách không
+            var record = _otpList.FirstOrDefault(x => x.Email == request.Email.Trim());
+
+            if (record == null)
+                return BadRequest("Chưa có yêu cầu mã OTP cho email này.");
+
+            if (DateTime.Now > record.ExpireTime)
+            {
+                _otpList.Remove(record);
+                return BadRequest("Mã OTP đã hết hạn (quá 5 phút).");
+            }
+
+            if (record.Otp != request.Otp.Trim())
+                return BadRequest("Mã xác thực OTP không chính xác.");
+
+            return Ok("Mã OTP chính xác!");
+        }
+
+        // 6. API ĐẶT LẠI MẬT KHẨU MỚI: POST /api/auth/reset-password
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.NewPassword))
+                return BadRequest("Thông tin không hợp lệ.");
+
+            if (request.NewPassword.Length < 8)
+                return BadRequest("Mật khẩu mới phải có ít nhất 8 ký tự.");
+
+            // Kiểm tra mã OTP một lần nữa trước khi cho đổi
+            var record = _otpList.FirstOrDefault(x => x.Email == request.Email.Trim());
+            if (record == null || record.Otp != request.Otp?.Trim())
+                return BadRequest("Mã OTP không hợp lệ hoặc đã hết hạn.");
+
+            // Băm mật khẩu mới bằng BCrypt
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            // Cập nhật mật khẩu mới vào bảng Users trên Azure
+            string updateSql = "UPDATE Users SET password_hash = @PasswordHash WHERE email = @Email";
+            await connection.ExecuteAsync(updateSql, new { PasswordHash = passwordHash, Email = request.Email.Trim() });
+
+            // Xóa mã OTP đi sau khi đổi thành công để không bị dùng lại
+            _otpList.Remove(record);
+
+            return Ok("Đặt lại mật khẩu thành công!" );
+        }
     }
 
     // KHAI BÁO CÁC MODEL NHẬN DỮ LIỆU NGAY TẠI ĐÂY
@@ -119,5 +224,28 @@ namespace GlobalSuccess.Api.Controllers
         public long UserId { get; set; }
         public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+    }
+
+    // Đối tượng lưu thông tin 1 mã OTP
+    public class OtpRecord
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Otp { get; set; } = string.Empty;
+        public DateTime ExpireTime { get; set; }
+    }
+    public class ForgotPasswordRequest
+    {
+        public string Email { get; set; } = string.Empty;
+    }
+    public class VerifyOtpRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Otp { get; set; } = string.Empty;
+    }
+    public class ResetPasswordRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Otp { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
     }
 }
