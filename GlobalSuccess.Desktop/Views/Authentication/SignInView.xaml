@@ -416,14 +416,28 @@
                                      Style="{StaticResource SignInPasswordBoxStyle}"
                                      Margin="0,0,42,0"/>
 
-                        <!-- Eye icon placeholder -->
+                        <TextBox x:Name="txtPasswordVisible"
+                                 Height="46"
+                                 Padding="14,0"
+                                 FontFamily="Inter"
+                                 FontSize="13"
+                                 Foreground="#0F172A"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,0,42,0"
+                                 Visibility="Collapsed"/>
 
-                        <TextBlock Text="◉"
+                        <!-- Eye icon toggle -->
+                        <TextBlock x:Name="iconTogglePassword"
+                                   Text="&#128065;"
                                    FontSize="16"
                                    Foreground="#94A3B8"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,15,0"/>
+                                   Margin="0,0,15,0"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="IconTogglePassword_MouseLeftButtonDown"/>
 
                     </Grid>
 
