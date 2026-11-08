@@ -16,7 +16,7 @@ namespace GlobalSuccess.Desktop.Services
         public static void SetBearerToken(string token)
         {
             SavedToken = token;
-            // GẮN TOKEN VÀO AUTHORIZATION HEADER (Đúng theo yêu cầu Task 26)
+            // GẮN TOKEN VÀO AUTHORIZATION HEADER
             Http.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
         }
