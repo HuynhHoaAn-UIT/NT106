@@ -57,7 +57,7 @@ namespace GlobalSuccess.Api.Controllers
                 FullName = request.FullName.Trim()
             });
 
-            return Ok(new { message = "Đăng ký tài khoản thành công!", userId = newUserId });
+            return Ok("Đăng ký tài khoản thành công!");
         }
         // 2. API ĐĂNG NHẬP: POST /api/auth/login
         [HttpPost("login")]
