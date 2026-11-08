@@ -335,7 +335,8 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0"
+                        <TextBlock x:Name="txtDisplayEmail"
+                                    Grid.Column="0"
                                    Text="Loisbecket@gmail.com"
                                    FontFamily="Inter"
                                    FontSize="13"
@@ -347,7 +348,8 @@
                                 Content="Đổi email"
                                 Style="{StaticResource TextButtonStyle}"
                                 FontWeight="SemiBold"
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center"
+                                Click="BtnChangeEmail_Click"/>
 
                     </Grid>
 
@@ -362,7 +364,7 @@
                     <TextBox x:Name="OtpTextBox"
                              Style="{StaticResource OtpTextBoxStyle}"
                              MaxLength="11"
-                             Text="2 4 8 1 6 3"
+                             Text=""
                              Margin="0,0,0,15"/>
 
                     <!-- OTP EXPIRATION NOTE -->
@@ -375,7 +377,8 @@
                     <!-- VERIFY BUTTON -->
                     <Button Content="Xác thực mã"
                             Style="{StaticResource PrimaryButtonStyle}"
-                            Margin="0,0,0,25"/>
+                            Margin="0,0,0,25"
+                            Click="BtnVerifyOtp_Click"/>
 
                     <!-- RESEND OTP -->
                     <StackPanel Orientation="Horizontal"
@@ -391,7 +394,8 @@
                         <Button Content="Gửi lại mã"
                                 Style="{StaticResource TextButtonStyle}"
                                 FontWeight="Bold"
-                                Margin="7,0,0,0"/>
+                                Margin="7,0,0,0"
+                                Click="BtnResendOtp_Click"/>
 
                     </StackPanel>
 
@@ -407,7 +411,9 @@
                     <Button Content="← Quay lại đăng nhập"
                             Style="{StaticResource TextButtonStyle}"
                             HorizontalAlignment="Center"
-                            FontWeight="SemiBold"/>
+                            FontWeight="SemiBold"
+                            Click="BtnBackToSignIn_Click"/>
+                    
 
                 </StackPanel>
 
