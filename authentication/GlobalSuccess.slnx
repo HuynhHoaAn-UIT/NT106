@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="GlobalSuccess.Api/GlobalSuccess.Api.csproj" Id="d8f09cc4-f7e6-40eb-abe8-7188d8cb13fb">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+  <Project Path="GlobalSuccess.Desktop/GlobalSuccess.Desktop.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+</Solution>
