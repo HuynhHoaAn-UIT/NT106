@@ -1,7 +1,7 @@
 ﻿<Window x:Class="GlobalSuccess.Desktop.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:auth="clr-namespace:GlobalSuccess.Desktop.Views.Authentication"
+        xmlns:scholarship="clr-namespace:GlobalSuccess.Desktop.Views.Scholarship"
         Title="GLOBAL SUCCESS"
         Width="1440"
         Height="1024"
@@ -11,6 +11,6 @@
         Background="#F4F7FC"
         ResizeMode="CanResize">
 
-    <auth:PasswordResetSuccessView/>
+    <scholarship:ScholarshipDetailView/>
 
 </Window>
