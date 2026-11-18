@@ -1,0 +1,895 @@
+﻿<UserControl x:Class="GlobalSuccess.Desktop.Views.Account.HelpCenterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             MinWidth="1000"
+             MinHeight="700">
+
+    <UserControl.Resources>
+
+        <!-- COLORS -->
+        <SolidColorBrush x:Key="BrandPrimary" Color="#211B70"/>
+        <SolidColorBrush x:Key="PageBackground" Color="#F4F7FC"/>
+        <SolidColorBrush x:Key="MainText" Color="#0F172A"/>
+        <SolidColorBrush x:Key="SecondaryText" Color="#64748B"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E2E8F0"/>
+
+        <!-- SIDEBAR BUTTON -->
+        <Style x:Key="SidebarButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="10,0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder"
+                                        Property="Background"
+                                        Value="#F1F0FA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- SEARCH INPUT -->
+        <Style x:Key="SearchTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- OUTLINE BUTTON -->
+        <Style x:Key="OutlineButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#211B70"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="9,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- PRIMARY BUTTON -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="#211B70"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="10,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Background"
+                                        Value="#342D8A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- FAQ ROW -->
+        <Style x:Key="FaqRowStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Margin" Value="0,0,0,9"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <!-- ROOT -->
+    <Grid Background="{StaticResource PageBackground}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="224"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ================================================= -->
+        <!-- SIDEBAR - SHARED NAVIGATION -->
+        <!-- ================================================= -->
+
+        <Border Grid.Column="0"
+                Background="White"
+                BorderBrush="#E2E8F0"
+                BorderThickness="0,0,1,0">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- LOGO -->
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Margin="16,0,0,0"
+                            VerticalAlignment="Center">
+
+                    <Image Source="/Assets/Icons/logo.png"
+                           Width="40"
+                           Height="40"
+                           Stretch="Uniform"/>
+
+                    <TextBlock Text="GLOBAL&#10;SUCCESS"
+                               FontFamily="Inter"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#211B70"
+                               Margin="7,0,0,0"
+                               VerticalAlignment="Center"
+                               LineHeight="16"/>
+                </StackPanel>
+
+                <!-- MAIN NAVIGATION -->
+                <StackPanel Grid.Row="1"
+                            Margin="10,0,10,10">
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/compass.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Khám phá học bổng"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/Cộng đồng.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Cộng đồng"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/Tin nhắn.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Tin nhắn"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/Tài khoản.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Tài khoản"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- PERSONAL SPACE -->
+                <StackPanel Grid.Row="2"
+                            Margin="10,0,10,10">
+
+                    <Border Height="1"
+                            Background="#E2E8F0"
+                            Margin="0,0,0,18"/>
+
+                    <TextBlock Text="KHÔNG GIAN CỦA BẠN"
+                               FontFamily="Inter"
+                               FontSize="9"
+                               FontWeight="SemiBold"
+                               Foreground="#64748B"
+                               Margin="10,0,0,8"/>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/bookmark.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Mục đã lưu"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- BOTTOM NAVIGATION -->
+                <StackPanel Grid.Row="4"
+                            Margin="10,0,10,10">
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/Đăng xuất.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Đăng xuất"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/Cài đặt.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Cài đặt tài khoản"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- SUPPORT ACTIVE -->
+                    <Button Style="{StaticResource SidebarButtonStyle}"
+                            Background="#EEEDFA"
+                            Foreground="#211B70">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox
+                                Source="/Assets/Icons/circle-help.svg"
+                                Width="17" Height="17"
+                                Margin="0,0,12,0"/>
+                            <TextBlock Text="Trung tâm hỗ trợ"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Border Height="1"
+                            Background="#E2E8F0"
+                            Margin="0,8,0,12"/>
+
+                    <!-- USER PROFILE -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="36"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Ellipse Width="34"
+                                 Height="34"
+                                 Fill="#D8E2F1"
+                                 VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="KL"
+                                   FontFamily="Inter"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="#211B70"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Margin="8,0,0,0">
+                            <TextBlock Text="Nguyễn Kim Loan"
+                                       FontFamily="Inter"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="#0F172A"/>
+
+                            <TextBlock Text="Người hướng dẫn"
+                                       FontFamily="Inter"
+                                       FontSize="9"
+                                       Foreground="#64748B"
+                                       Margin="0,3,0,0"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="⌄"
+                                   FontSize="15"
+                                   Foreground="#211B70"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ================================================= -->
+        <!-- MAIN AREA -->
+        <!-- ================================================= -->
+
+        <Grid Grid.Column="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- TOPBAR -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="0,0,0,1">
+
+                <Grid Margin="28,0,28,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- BREADCRUMB -->
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+
+                        <TextBlock Text="GLOBAL SUCCESS"
+                                   FontFamily="Inter"
+                                   FontSize="11"
+                                   Foreground="#94A3B8"/>
+
+                        <TextBlock Text="  /  "
+                                   FontSize="11"
+                                   Foreground="#CBD5E1"/>
+
+                        <TextBlock Text="Trung tâm hỗ trợ"
+                                   FontFamily="Inter"
+                                   FontSize="11"
+                                   Foreground="#64748B"/>
+                    </StackPanel>
+
+                    <!-- SEARCH -->
+                    <Border Grid.Column="1"
+                            Width="260"
+                            Height="38"
+                            Background="White"
+                            BorderBrush="#E2E8F0"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            VerticalAlignment="Center">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <svgc:SvgViewbox
+                                Grid.Column="0"
+                                Source="/Assets/Icons/Biểu tượng tìm kiếm.svg"
+                                Width="15" Height="15"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Column="1"
+                                     Style="{StaticResource SearchTextBoxStyle}"
+                                     Text="Tìm học bổng, bài viết..."/>
+                        </Grid>
+                    </Border>
+
+                    <!-- NOTIFICATION -->
+                    <svgc:SvgViewbox
+                        Grid.Column="2"
+                        Source="/Assets/Icons/Thông báo.svg"
+                        Width="20" Height="20"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    <!-- AVATAR -->
+                    <Ellipse Grid.Column="3"
+                             Width="30"
+                             Height="30"
+                             Fill="#D8E2F1"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ================================================= -->
+            <!-- HELP CENTER CONTENT -->
+            <!-- ================================================= -->
+
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+
+                <StackPanel Margin="24,18,24,22">
+
+                    <!-- PAGE HEADER -->
+                    <StackPanel Margin="0,0,0,14">
+                        <TextBlock Text="Trung tâm hỗ trợ"
+                                   FontFamily="Suez One"
+                                   FontSize="25"
+                                   Foreground="#0F172A"/>
+
+                        <TextBlock Text="Chúng tôi luôn sẵn sàng hỗ trợ bạn."
+                                   FontFamily="Inter"
+                                   FontSize="10"
+                                   Foreground="#94A3B8"
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+
+                    <!-- HERO SEARCH -->
+                    <Border Background="#211B70"
+                            CornerRadius="10"
+                            Padding="16"
+                            Margin="0,0,0,12">
+
+                        <StackPanel>
+                            <TextBlock Text="Bạn đang cần hỗ trợ điều gì?"
+                                       FontFamily="Suez One"
+                                       FontSize="17"
+                                       Foreground="White"
+                                       Margin="0,0,0,10"/>
+
+                            <Border Background="White"
+                                    CornerRadius="7"
+                                    Height="36">
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="⌕"
+                                               FontSize="19"
+                                               Foreground="#64748B"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBox Grid.Column="1"
+                                             Height="34"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             FontFamily="Inter"
+                                             FontSize="9"
+                                             Foreground="#64748B"
+                                             VerticalContentAlignment="Center"
+                                             Text="Bạn đang cần hỗ trợ điều gì?"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- TWO COLUMN BODY -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.15*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- LEFT COLUMN -->
+                        <StackPanel Grid.Column="0"
+                                    Margin="0,0,12,0">
+
+                            <!-- FAQ HEADER -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Câu hỏi thường gặp"
+                                           FontFamily="Suez One"
+                                           FontSize="15"
+                                           Foreground="#0F172A"/>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="Xem tất cả"
+                                           FontFamily="Inter"
+                                           FontSize="9"
+                                           FontWeight="SemiBold"
+                                           Foreground="#211B70"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- FAQ 1 -->
+                            <Border Style="{StaticResource FaqRowStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Width="26"
+                                            Height="26"
+                                            Background="#EEEDFA"
+                                            CornerRadius="7"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="?"
+                                                   FontFamily="Inter"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="Làm thế nào để hoàn thiện hồ sơ cá nhân?"
+                                               FontFamily="Inter"
+                                               FontSize="10"
+                                               Foreground="#0F172A"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="›"
+                                               FontSize="19"
+                                               Foreground="#211B70"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- FAQ 2 -->
+                            <Border Style="{StaticResource FaqRowStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Width="26"
+                                            Height="26"
+                                            Background="#EEEDFA"
+                                            CornerRadius="7"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="?"
+                                                   FontFamily="Inter"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="Làm sao để gửi đơn ứng tuyển người hướng dẫn?"
+                                               FontFamily="Inter"
+                                               FontSize="10"
+                                               Foreground="#0F172A"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="›"
+                                               FontSize="19"
+                                               Foreground="#211B70"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- FAQ 3 -->
+                            <Border Style="{StaticResource FaqRowStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Width="26"
+                                            Height="26"
+                                            Background="#EEEDFA"
+                                            CornerRadius="7"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="?"
+                                                   FontFamily="Inter"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="Tôi có thể theo dõi trạng thái đơn ở đâu?"
+                                               FontFamily="Inter"
+                                               FontSize="10"
+                                               Foreground="#0F172A"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="›"
+                                               FontSize="19"
+                                               Foreground="#211B70"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- FAQ 4 -->
+                            <Border Style="{StaticResource FaqRowStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Width="26"
+                                            Height="26"
+                                            Background="#EEEDFA"
+                                            CornerRadius="7"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="?"
+                                                   FontFamily="Inter"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="Tôi phải làm gì khi gặp lỗi ứng dụng?"
+                                               FontFamily="Inter"
+                                               FontSize="10"
+                                               Foreground="#0F172A"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"/>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="›"
+                                               FontSize="19"
+                                               Foreground="#211B70"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- CONTACT SUPPORT CARD -->
+                            <Border Background="White"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="13"
+                                    Margin="0,2,0,0">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="Liên hệ hỗ trợ"
+                                               FontFamily="Suez One"
+                                               FontSize="15"
+                                               Foreground="#0F172A"
+                                               Margin="0,0,0,10"/>
+
+                                    <!-- EMAIL SUPPORT -->
+                                    <Grid Margin="0,0,0,9">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="28"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="✉"
+                                                   FontSize="17"
+                                                   Foreground="#211B70"
+                                                   VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Email hỗ trợ"
+                                                       FontFamily="Inter"
+                                                       FontSize="10"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#0F172A"/>
+
+                                            <TextBlock Text="Liên hệ với đội ngũ khi bạn cần trợ giúp"
+                                                       FontFamily="Inter"
+                                                       FontSize="9"
+                                                       Foreground="#94A3B8"
+                                                       Margin="0,4,0,3"/>
+
+                                            <TextBlock Text="Gửi email cho chúng tôi"
+                                                       FontFamily="Inter"
+                                                       FontSize="9"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#211B70"/>
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="›"
+                                                   FontSize="19"
+                                                   Foreground="#211B70"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+
+                                    <Border Height="1"
+                                            Background="#E2E8F0"
+                                            Margin="0,0,0,9"/>
+
+                                    <!-- REPORT ISSUE -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="28"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="ⓘ"
+                                                   FontSize="17"
+                                                   Foreground="#211B70"
+                                                   VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Báo cáo sự cố"
+                                                       FontFamily="Inter"
+                                                       FontSize="10"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#0F172A"/>
+
+                                            <TextBlock Text="Thông báo lỗi hoặc vấn đề bạn gặp phải"
+                                                       FontFamily="Inter"
+                                                       FontSize="9"
+                                                       Foreground="#94A3B8"
+                                                       Margin="0,4,0,3"/>
+
+                                            <TextBlock Text="Giúp chúng tôi xử lý nhanh hơn"
+                                                       FontFamily="Inter"
+                                                       FontSize="9"
+                                                       Foreground="#94A3B8"/>
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="›"
+                                                   FontSize="19"
+                                                   Foreground="#211B70"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- RIGHT COLUMN -->
+                        <StackPanel Grid.Column="1">
+
+                            <!-- FEEDBACK CARD -->
+                            <Border Background="#EEEDFA"
+                                    BorderBrush="#E5E2F7"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="14">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="♧"
+                                               FontSize="24"
+                                               Foreground="#211B70"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="Ý KIẾN CỦA BẠN RẤT QUAN TRỌNG"
+                                               FontFamily="Inter"
+                                               FontSize="8"
+                                               FontWeight="SemiBold"
+                                               Foreground="#64748B"
+                                               Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Cùng chúng tôi hoàn thiện ứng dụng"
+                                               FontFamily="Suez One"
+                                               FontSize="18"
+                                               Foreground="#0F172A"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,9"/>
+
+                                    <TextBlock
+                                        Text="Góp ý của bạn giúp trải nghiệm kết nối người hướng dẫn – người được hướng dẫn ngày càng tốt hơn."
+                                        FontFamily="Inter"
+                                        FontSize="9"
+                                        Foreground="#64748B"
+                                        TextWrapping="Wrap"
+                                        LineHeight="15"
+                                        Margin="0,0,0,10"/>
+
+                                    <StackPanel Margin="5,0,0,10">
+                                        <TextBlock Text="Đề xuất tính năng"
+                                                   FontFamily="Inter"
+                                                   FontSize="9"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"
+                                                   Margin="0,0,0,8"/>
+
+                                        <TextBlock Text="Báo lỗi ứng dụng"
+                                                   FontFamily="Inter"
+                                                   FontSize="9"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"
+                                                   Margin="0,0,0,8"/>
+
+                                        <TextBlock Text="Góp ý trải nghiệm"
+                                                   FontFamily="Inter"
+                                                   FontSize="9"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#211B70"/>
+                                    </StackPanel>
+
+                                    <Button Content="Gửi góp ý ngay ↗"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Height="34"/>
+
+                                    <TextBlock Text="Chỉ mất khoảng 2 phút"
+                                               FontFamily="Inter"
+                                               FontSize="8"
+                                               Foreground="#94A3B8"
+                                               Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- THANK YOU -->
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,12,0,0">
+
+                                <TextBlock Text="♡"
+                                           FontSize="19"
+                                           Foreground="#211B70"
+                                           Margin="0,0,8,0"/>
+
+                                <TextBlock Text="Cảm ơn bạn đã giúp chúng tôi tốt hơn mỗi ngày!"
+                                           FontFamily="Inter"
+                                           FontSize="8"
+                                           Foreground="#94A3B8"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>
