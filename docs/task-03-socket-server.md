@@ -15,11 +15,6 @@ Task 03 chỉ tạo socket, bind địa chỉ/cổng, listen, accept và ghi log
 
 ## Mã C# nền tảng
 
-Từ thư mục làm việc, tạo project console .NET 10 nếu chưa có:
-
-```powershell
-dotnet new console -n GlobalSuccess.SocketServer -f net10.0
-```
 
 `GlobalSuccess.SocketServer/Program.cs` :
 
@@ -74,7 +69,5 @@ Test-NetConnection 127.0.0.1 -Port 8085
 ```
 
 ## Bàn giao để tích hợp
-Loan: Lấy code Task 03 để chạy Socket Server ở 127.0.0.1:8085, rồi dùng TcpClient trong WPF kết nối thử. Server hiện chỉ ghi log Accepted rồi đóng kết nối.
-
-Bảo: Dùng AuthController và JwtTokenService đã commit để phối hợp với Ân ở bước xác thực chat. Sau này WPF gửi JWT từ API đăng nhập, Socket Server của Ân kiểm tra token đó.
-
+Loan sẽ nối màn hình Chat WPF với Socket Server của Ân. Trước mắt, Loan dùng code Task 03 để thử xem ứng dụng có kết nối được tới server không. Khi Ân làm xong phần gửi và nhận tin nhắn, Loan sẽ nối nút Gửi và hiển thị tin nhắn nhận được.
+Bảo đã làm API đăng nhập trả về JWT. Khi tích hợp chat, Bảo sẽ phối hợp với Socket Server kiểm tra JWT đó và biết ai đang kết nối. Bước thử kết nối hiện tại có thể chạy ngay, chưa cần JWT.
