@@ -1,8 +1,5 @@
 # Task 03 — Lập trình Socket Server TCP nền tảng bằng C#
 
-**Phụ trách:** Hòa Ân  
-**Trạng thái:** Đang thực hiện. Đánh dấu hoàn thành sau khi chạy kiểm thử kết nối.  
-**Đầu ra:** Mã khởi động TCP listener cho .NET 10, cách kiểm thử độc lập và quy ước để tích hợp WPF với API xác thực.
 
 ## Phạm vi của ứng dụng
 
@@ -14,7 +11,7 @@
 | Khám phá — lọc và theo dõi học bổng | WPF gọi API lọc và lưu lượt theo dõi khi các endpoint tương ứng sẵn sàng. |
 | Cộng đồng + Chat (Discover & Chat) | Socket TCP phục vụ chat realtime. Phòng chat, định tuyến, broadcast, truyền file và các thao tác cộng đồng được triển khai theo các task tương ứng. |
 
-Task 03 chỉ tạo socket, bind địa chỉ/cổng, listen, accept và ghi log kết nối. Ân có thể kiểm thử bằng một TCP client độc lập, trước khi ghép với WPF, JWT hay MySQL.
+Task 03 chỉ tạo socket, bind địa chỉ/cổng, listen, accept và ghi log kết nối.
 
 ## Mã C# nền tảng
 
@@ -79,11 +76,6 @@ Test-NetConnection 127.0.0.1 -Port 8085
 Đạt khi terminal server in `Listening on 127.0.0.1:8085`, client báo `TcpTestSucceeded : True`, server in `Accepted` kèm endpoint của client, lần chạy thứ hai được nhận và Ctrl+C dừng listener. Cổng TCP 8085 dùng cho kiểm thử Socket Server, tách khỏi cổng HTTP 5116 của API.
 
 ## Bàn giao để tích hợp
+Loan: Lấy code Task 03 để chạy Socket Server ở 127.0.0.1:8085, rồi dùng TcpClient trong WPF kết nối thử. Server hiện chỉ ghi log Accepted rồi đóng kết nối.
+Bảo: Dùng AuthController và JwtTokenService đã commit để phối hợp với Ân ở bước xác thực chat. Sau này WPF gửi JWT từ API đăng nhập, Socket Server của Ân kiểm tra token đó.
 
-| Người | Phần sử dụng và cách tích hợp |
-| --- | --- |
-| **Ân** | Chạy listener và kiểm tra log. Khi làm task chat tiếp theo, áp dụng framing đã đề xuất ở [Task 01](task-01-socket-protocol.md): 4 byte độ dài big-endian, rồi JSON UTF-8 gồm `header` và `body`. |
-| **Loan** | WPF có thể dùng `TcpClient.ConnectAsync` với `127.0.0.1:8085` để test kết nối trên cùng máy. Bản này đóng socket sau khi accept, nên chỉ dùng để kiểm tra kết nối. Khi Ân bổ sung phiên chat, dùng cùng framing và chốt các trường dữ liệu cho `CHAT_JOIN`, `CHAT_SEND`, `CHAT_MESSAGE` trước khi nối UI. |
-| **Bảo** | Giữ API xác thực hiện tại. Trước khi gửi JWT qua kết nối chat thật, thống nhất TLS, cách Socket Server kiểm tra chữ ký, issuer, audience, thời hạn token và cách xử lý khi tài khoản bị xóa. Hai dịch vụ cấu hình riêng, dùng biến môi trường hoặc kho bí mật cho khóa và thông tin kết nối. |
-
-Các tên gói tin ở phần bàn giao mô tả bước tích hợp sau Task 03. Mã C# ở trên thực hiện phần listener nền tảng.
