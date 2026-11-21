@@ -49,5 +49,8 @@
       <Resource Include="Assets\Icons\log_out.svg" />
       <Resource Include="Assets\Icons\Ảnh đại diện.png" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Views\NewFolder\" />
+    </ItemGroup>
 
 </Project>

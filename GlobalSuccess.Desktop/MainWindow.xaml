@@ -1,12 +1,12 @@
 ﻿<Window x:Class="GlobalSuccess.Desktop.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:scholarship="clr-namespace:GlobalSuccess.Desktop.Views.Scholarship"
         Title="GLOBAL SUCCESS"
         Width="1440"
         Height="1024"
-        MinWidth="1000"
-        MinHeight="700"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         Background="#F4F7FC"
         ResizeMode="CanResize">
 

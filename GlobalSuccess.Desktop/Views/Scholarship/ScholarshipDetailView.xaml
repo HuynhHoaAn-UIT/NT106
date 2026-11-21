@@ -1,0 +1,649 @@
+﻿<UserControl x:Class="GlobalSuccess.Desktop.Views.Scholarship.ScholarshipDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             MinWidth="1000"
+             MinHeight="700">
+
+    <UserControl.Resources>
+        <!-- COLORS -->
+        <SolidColorBrush x:Key="BrandPrimary" Color="#211B70"/>
+        <SolidColorBrush x:Key="PageBackground" Color="#F4F7FC"/>
+        <SolidColorBrush x:Key="MainText" Color="#0F172A"/>
+        <SolidColorBrush x:Key="SecondaryText" Color="#64748B"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E2E8F0"/>
+
+        <!-- SIDEBAR BUTTON -->
+        <Style x:Key="SidebarButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="10,0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder"
+                                        Property="Background"
+                                        Value="#F1F0FA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TEXT BUTTON -->
+        <Style x:Key="TextButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#211B70"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- PRIMARY BUTTON -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Background" Value="#211B70"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="8,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Background"
+                                        Value="#342D8A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- OUTLINE BUTTON -->
+        <Style x:Key="OutlineButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#211B70"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="8,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- MAIN LAYOUT -->
+    <Grid Background="{StaticResource PageBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="224"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- SIDEBAR -->
+        <Border Grid.Column="0"
+                Background="White"
+                BorderBrush="#E2E8F0"
+                BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- LOGO -->
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Margin="16,0,0,0"
+                            VerticalAlignment="Center">
+                    <Image Source="/Assets/Icons/logo.png"
+                           Width="40"
+                           Height="40"
+                           Stretch="Uniform"/>
+                    <TextBlock Text="GLOBAL&#10;SUCCESS"
+                               FontFamily="Inter"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#211B70"
+                               Margin="7,0,0,0"
+                               VerticalAlignment="Center"
+                               LineHeight="16"/>
+                </StackPanel>
+
+                <!-- MAIN NAVIGATION -->
+                <StackPanel Grid.Row="1" Margin="10,0,10,10">
+                    <Button Style="{StaticResource SidebarButtonStyle}"
+                            Background="#EEEDFA"
+                            Foreground="#211B70">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/compass.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Khám phá học bổng"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/community.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Cộng đồng"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/message.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Tin nhắn"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/account.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Tài khoản"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- PERSONAL SPACE -->
+                <StackPanel Grid.Row="2" Margin="10,0,10,10">
+                    <Border Height="1"
+                            Background="#E2E8F0"
+                            Margin="0,0,0,18"/>
+
+                    <TextBlock Text="KHÔNG GIAN CỦA BẠN"
+                               FontFamily="Inter"
+                               FontSize="9"
+                               FontWeight="SemiBold"
+                               Foreground="#64748B"
+                               Margin="10,0,0,8"/>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/bookmark.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Mục đã lưu"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- BOTTOM NAVIGATION -->
+                <StackPanel Grid.Row="4" Margin="10,0,10,10">
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/log_out.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Đăng xuất"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Source="/Assets/Icons/setting.svg"
+                                             Width="17" Height="17"
+                                             Margin="0,0,12,0"/>
+                            <TextBlock Text="Cài đặt tài khoản"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="ⓘ"
+                                       FontSize="17"
+                                       Foreground="#64748B"
+                                       Width="17"
+                                       Margin="0,0,12,0"/>
+                            <TextBlock Text="Trung tâm hỗ trợ"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Border Height="1"
+                            Background="#E2E8F0"
+                            Margin="0,8,0,12"/>
+
+                    <!-- USER PROFILE -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="36"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Ellipse Width="34" Height="34"
+                                 Fill="#D8E2F1"
+                                 VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="KL"
+                                   FontFamily="Inter"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="#211B70"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Margin="8,0,0,0">
+                            <TextBlock Text="Nguyễn Kim Loan"
+                                       FontFamily="Inter"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="#0F172A"/>
+                            <TextBlock Text="Bạn"
+                                       FontFamily="Inter"
+                                       FontSize="9"
+                                       Foreground="#64748B"
+                                       Margin="0,3,0,0"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="⌄"
+                                   FontSize="15"
+                                   Foreground="#211B70"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- MAIN CONTENT -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- TOP BAR -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="0,0,0,1">
+                <Grid Margin="28,0,28,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="GLOBAL SUCCESS"
+                                   FontFamily="Inter"
+                                   FontSize="11"
+                                   Foreground="#94A3B8"/>
+                        <TextBlock Text="  /  "
+                                   FontSize="11"
+                                   Foreground="#CBD5E1"/>
+                        <TextBlock Text="Chi tiết học bổng"
+                                   FontFamily="Inter"
+                                   FontSize="11"
+                                   Foreground="#64748B"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1"
+                            Width="260"
+                            Height="38"
+                            Background="White"
+                            BorderBrush="#E2E8F0"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            VerticalAlignment="Center">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <svgc:SvgViewbox Grid.Column="0"
+                                             Source="/Assets/Icons/find.svg"
+                                             Width="15" Height="15"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Column="1"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     FontFamily="Inter"
+                                     FontSize="11"
+                                     VerticalContentAlignment="Center"
+                                     Text="Tìm học bổng, bài viết..."
+                                     Foreground="#94A3B8"/>
+                        </Grid>
+                    </Border>
+
+                    <svgc:SvgViewbox Grid.Column="2"
+                                     Source="/Assets/Icons/bell.svg"
+                                     Width="20" Height="20"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+
+                    <Ellipse Grid.Column="3"
+                             Width="30" Height="30"
+                             Fill="#D8E2F1"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- DETAIL CONTENT -->
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="32,22,32,28">
+
+                    <!-- PAGE TITLE -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Chi tiết học bổng"
+                                   FontFamily="Suez One"
+                                   FontSize="28"
+                                   Foreground="#0F172A"
+                                   VerticalAlignment="Center"/>
+
+                        <Button Grid.Column="1"
+                                Content="Chia sẻ học bổng"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Width="120"
+                                Height="36"/>
+                    </Grid>
+
+                    <!-- CAMPUS BANNER -->
+                    <Border Height="280"
+                            CornerRadius="12"
+                            ClipToBounds="True"
+                            Background="#D8E2F1"
+                            Margin="0,0,0,22">
+                        <svgc:SvgViewbox Source="/Assets/Icons/campus.svg"
+                                         Stretch="UniformToFill"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Stretch"/>
+                    </Border>
+
+                    <!-- INFORMATION COLUMNS -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.7*"/>
+                            <ColumnDefinition Width="0.9*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- LEFT: SCHOLARSHIP DESCRIPTION -->
+                        <Border Grid.Column="0"
+                                Background="White"
+                                BorderBrush="#E2E8F0"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="22"
+                                Margin="0,0,12,0">
+
+                            <StackPanel>
+                                <!-- STATUS -->
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,0,0,12">
+                                    <Border Background="#E8F7EE"
+                                            CornerRadius="10"
+                                            Padding="9,4"
+                                            Margin="0,0,8,0">
+                                        <TextBlock Text="Đang mở"
+                                                   FontFamily="Inter"
+                                                   FontSize="10"
+                                                   Foreground="#15803D"/>
+                                    </Border>
+
+                                    <Border Background="#FFF4E5"
+                                            CornerRadius="10"
+                                            Padding="9,4">
+                                        <TextBlock Text="Đóng đơn sau 5 ngày"
+                                                   FontFamily="Inter"
+                                                   FontSize="10"
+                                                   Foreground="#C77700"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- TITLE -->
+                                <TextBlock Text="Global Excellence Scholarship"
+                                           FontFamily="Suez One"
+                                           FontSize="25"
+                                           Foreground="#0F172A"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Aurora University · Học bổng mẫu"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           Foreground="#64748B"
+                                           Margin="0,0,0,16"/>
+
+                                <Border Height="1"
+                                        Background="#E2E8F0"
+                                        Margin="0,0,0,16"/>
+
+                                <!-- INTRODUCTION -->
+                                <TextBlock Text="Giới thiệu học bổng"
+                                           FontFamily="Suez One"
+                                           FontSize="17"
+                                           Foreground="#0F172A"
+                                           Margin="0,0,0,12"/>
+
+                                <TextBlock
+                                    Text="Học bổng mẫu này hỗ trợ sinh viên quốc tế tìm kiếm chương trình đại học hoặc sau đại học toàn thời gian tại Aurora University. Ứng viên cần thể hiện thành tích học tập xuất sắc và sự tham gia cộng đồng."
+                                    FontFamily="Inter"
+                                    FontSize="12"
+                                    Foreground="#64748B"
+                                    TextWrapping="Wrap"
+                                    LineHeight="20"
+                                    Margin="0,0,0,12"/>
+
+                                <TextBlock
+                                    Text="Nộp bằng điểm, bài giới thiệu bản thân, hai thư giới thiệu và minh chứng nhập học trước ngày 17 tháng Mười, 2026. Hồ sơ cần trình bày rõ học phí và các chi phí sinh hoạt hàng tháng trong thời gian học, với điều kiện duy trì tiến độ học tập đạt yêu cầu."
+                                    FontFamily="Inter"
+                                    FontSize="12"
+                                    Foreground="#64748B"
+                                    TextWrapping="Wrap"
+                                    LineHeight="20"
+                                    Margin="0,0,0,18"/>
+
+                                <Border Height="1"
+                                        Background="#E2E8F0"
+                                        Margin="0,0,0,16"/>
+
+                                <!-- ADDITIONAL INFORMATION -->
+                                <TextBlock Text="Điều kiện ứng tuyển"
+                                           FontFamily="Suez One"
+                                           FontSize="17"
+                                           Foreground="#0F172A"
+                                           Margin="0,0,0,10"/>
+
+                                <TextBlock
+                                    Text="• Có thành tích học tập tốt.&#10;• Đáp ứng điều kiện tuyển sinh của trường.&#10;• Có khả năng sử dụng tiếng Anh theo yêu cầu.&#10;• Hoàn thành hồ sơ trước hạn nộp."
+                                    FontFamily="Inter"
+                                    FontSize="12"
+                                    Foreground="#64748B"
+                                    TextWrapping="Wrap"
+                                    LineHeight="22"
+                                    Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Quyền lợi học bổng"
+                                           FontFamily="Suez One"
+                                           FontSize="17"
+                                           Foreground="#0F172A"
+                                           Margin="0,0,0,10"/>
+
+                                <TextBlock
+                                    Text="• Hỗ trợ toàn bộ học phí.&#10;• Trợ cấp sinh hoạt theo chính sách chương trình.&#10;• Cơ hội học tập và phát triển trong môi trường quốc tế."
+                                    FontFamily="Inter"
+                                    FontSize="12"
+                                    Foreground="#64748B"
+                                    TextWrapping="Wrap"
+                                    LineHeight="22"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- RIGHT: SCHOLARSHIP INFORMATION -->
+                        <Border Grid.Column="1"
+                                Background="White"
+                                BorderBrush="#E2E8F0"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="20"
+                                Margin="0,0,0,0">
+
+                            <StackPanel>
+                                <TextBlock Text="Thông tin học bổng"
+                                           FontFamily="Suez One"
+                                           FontSize="17"
+                                           Foreground="#0F172A"
+                                           Margin="0,0,0,16"/>
+
+                                <!-- DEADLINE -->
+                                <TextBlock Text="Hạn nộp"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           Foreground="#64748B"
+                                           Margin="0,0,0,7"/>
+
+                                <TextBlock Text="17/10/2026"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#0F172A"
+                                           Margin="0,0,0,12"/>
+
+                                <Border Height="1"
+                                        Background="#E2E8F0"
+                                        Margin="0,0,0,12"/>
+
+                                <!-- VALUE -->
+                                <TextBlock Text="Giá trị"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           Foreground="#64748B"
+                                           Margin="0,0,0,7"/>
+
+                                <TextBlock Text="Toàn bộ học phí + Trợ cấp"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#0F172A"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,12"/>
+
+                                <Border Height="1"
+                                        Background="#E2E8F0"
+                                        Margin="0,0,0,12"/>
+
+                                <!-- TYPE -->
+                                <TextBlock Text="Loại"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           Foreground="#64748B"
+                                           Margin="0,0,0,7"/>
+
+                                <TextBlock Text="Dựa trên thành tích"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#0F172A"
+                                           Margin="0,0,0,16"/>
+
+                                <!-- APPLY -->
+                                <Button Content="Trang chính thức / Ứng tuyển ngay"
+                                        Style="{StaticResource PrimaryButtonStyle}"
+                                        Margin="0,0,0,10"/>
+
+                                <Button Content="Tải mẫu đơn ứng tuyển (PDF/Docx)"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Margin="0,0,0,12"/>
+
+                                <!-- FOLLOW -->
+                                <Button Content="+ Theo dõi học bổng"
+                                        Style="{StaticResource TextButtonStyle}"
+                                        HorizontalAlignment="Left"
+                                        FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>
