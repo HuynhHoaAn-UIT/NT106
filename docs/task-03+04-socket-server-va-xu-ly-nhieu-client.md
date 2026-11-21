@@ -127,7 +127,7 @@ $clientB.Dispose()
 
 Đạt khi server ghi `Accepted` cho hai endpoint riêng, nhận dữ liệu của B sau khi A đóng, rồi ghi `Disconnected` cho mỗi kết nối. Thử thêm Ctrl+C khi client còn mở để kiểm tra server dừng và đóng các kết nối. Đánh dấu hoàn thành sau khi chạy kiểm thử.
 
-## Bàn giao
+## Bàn giao cho Loan — Task 3: Kết nối và tự kết nối lại Socket Client
 
-- **Loan — Task 3 (Đấu nối Client Socket đến Server và xử lý tự động kết nối lại khi mất mạng):** dùng server này để mở hai client WPF cùng lúc và kiểm tra một client có thể kết nối lại sau khi ngắt.
-- **Bảo:** Web API và JWT làm độc lập với Task 04.
+- Chạy `GlobalSuccess.SocketServer` của Ân. Trong project `GlobalSuccess.Desktop` đã commit, thêm Socket Client bằng `TcpClient` và gọi `ConnectAsync` khi mở màn hình Chat (`MessageView`). Chạy WPF và server trên cùng máy để thử với `127.0.0.1:8085`.
+- Mở hai cửa sổ WPF và kiểm tra server ghi `Accepted` cho cả hai. Dừng rồi chạy lại server để kiểm tra WPF tự kết nối lại mà giao diện vẫn phản hồi. Mã server này đủ để thử kết nối và kết nối lại. Nút **Gửi** sẽ nối ở task chat tiếp theo.
