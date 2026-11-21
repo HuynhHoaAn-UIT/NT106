@@ -1,15 +1,9 @@
 # Task 03 — Lập trình Socket Server TCP nền tảng bằng C#
 
 
-## Phạm vi của ứng dụng
+## Task này đối với của ứng dụng
 
-| Chức năng | Tích hợp dự kiến |
-| --- | --- |
-| Đăng ký, đăng nhập và quên mật khẩu | WPF gọi ASP.NET Core API của Bảo. Giữ luồng OTP và JWT nhóm đã demo. |
-| Đăng xuất | WPF xóa JWT khỏi phiên cục bộ và đóng kết nối chat khi tích hợp. |
-| Hồ sơ cá nhân và xóa tài khoản | WPF gọi API. Khi xóa tài khoản thành công, cần thống nhất cách vô hiệu hóa quyền truy cập và đóng phiên chat đang mở. |
-| Khám phá — lọc và theo dõi học bổng | WPF gọi API lọc và lưu lượt theo dõi khi các endpoint tương ứng sẵn sàng. |
-| Cộng đồng + Chat (Discover & Chat) | Socket TCP phục vụ chat realtime. Phòng chat, định tuyến, broadcast, truyền file và các thao tác cộng đồng được triển khai theo các task tương ứng. |
+Cộng đồng + Chat (Discover & Chat)	Hỗ trợ trực tiếp phần Chat. Loan có thể thử kết nối WPF với server của Ân ngay. Các bước tiếp theo sẽ dùng kết nối này để vào phòng, gửi và nhận tin nhắn realtime, rồi truyền file.
 
 Task 03 chỉ tạo socket, bind địa chỉ/cổng, listen, accept và ghi log kết nối.
 
@@ -56,18 +50,10 @@ finally
 
 ## Chạy thử và nghiệm thu
 
-Terminal 1:
-
-```powershell
-dotnet run --project GlobalSuccess.SocketServer
-```
-
-Terminal 2 trên cùng máy:
 
 ```powershell
 Test-NetConnection 127.0.0.1 -Port 8085
 ```
 
 ## Bàn giao để tích hợp
-Loan sẽ nối màn hình Chat WPF với Socket Server của Ân. Trước mắt, Loan dùng code Task 03 để thử xem ứng dụng có kết nối được tới server không. Khi Ân làm xong phần gửi và nhận tin nhắn, Loan sẽ nối nút Gửi và hiển thị tin nhắn nhận được.
-Bảo đã làm API đăng nhập trả về JWT. Khi tích hợp chat, Bảo sẽ phối hợp với Socket Server kiểm tra JWT đó và biết ai đang kết nối. Bước thử kết nối hiện tại có thể chạy ngay, chưa cần JWT.
+Loan —: Kết nối Socket Client từ WPF đến Server. Loan chạy code của Ân, rồi cho WPF kết nối thử. Server hiện Accepted là đạt phần kết nối ban đầu.
