@@ -1,14 +1,9 @@
 # Task 03+04 — Socket Server và xử lý nhiều client
 
-**Phụ trách:** Hòa Ân  
-**Kế hoạch:** 19/10/2026 – 23/10/2026  
-**Triển khai:** Ân có thể làm và kiểm thử độc lập với WPF của Loan và Web API của Bảo.
-
 ## Phạm vi và đầu ra
 
-Socket Server tạo TCP listener, bind địa chỉ và cổng, lắng nghe rồi nhận kết nối. Task 04 bao gồm các bước nền tảng này và cho phép nhiều client giữ kết nối TCP cùng lúc. Vòng lặp nhận kết nối tiếp tục chạy trong khi mỗi client có tác vụ đọc riêng. Khi một client ngắt, server dọn kết nối đó và vẫn phục vụ các client khác.
+Socket Server tạo TCP listener, bind địa chỉ và cổng, lắng nghe rồi nhận kết nối,cho phép nhiều client giữ kết nối TCP cùng lúc. Vòng lặp nhận kết nối tiếp tục chạy trong khi mỗi client có tác vụ đọc riêng. Khi một client ngắt, server dọn kết nối đó và vẫn phục vụ các client khác.
 
-Đầu ra là mã C# cho `GlobalSuccess.SocketServer/Program.cs` và kịch bản kiểm thử trên cổng `8085`. Phần đọc dữ liệu hiện dùng để xác nhận từng kết nối hoạt động. Định dạng gói tin, phòng chat và broadcast thuộc các bước tiếp theo.
 
 | Socket option | Cấu hình và mục đích |
 | --- | --- |
@@ -103,31 +98,9 @@ static async Task HandleClientAsync(TcpClient client, CancellationToken cancella
 }
 ```
 
-## Kiểm thử và nghiệm thu
 
-Chạy server từ thư mục chứa project:
 
-```powershell
-dotnet run --project GlobalSuccess.SocketServer
-```
+## Bàn giao cho Loan Kết nối và tự kết nối lại Socket Client
 
-Trong một cửa sổ PowerShell khác trên cùng máy, mở hai kết nối, đóng A rồi gửi thêm dữ liệu từ B:
-
-```powershell
-$clientA = [System.Net.Sockets.TcpClient]::new('127.0.0.1', 8085)
-$clientB = [System.Net.Sockets.TcpClient]::new('127.0.0.1', 8085)
-$clientA.Client.LocalEndPoint
-$clientB.Client.LocalEndPoint
-$payload = [System.Text.Encoding]::UTF8.GetBytes('test')
-$clientA.GetStream().Write($payload, 0, $payload.Length)
-$clientA.Dispose()
-$clientB.GetStream().Write($payload, 0, $payload.Length)
-$clientB.Dispose()
-```
-
-Đạt khi server ghi `Accepted` cho hai endpoint riêng, nhận dữ liệu của B sau khi A đóng, rồi ghi `Disconnected` cho mỗi kết nối. Thử thêm Ctrl+C khi client còn mở để kiểm tra server dừng và đóng các kết nối. Đánh dấu hoàn thành sau khi chạy kiểm thử.
-
-## Bàn giao cho Loan — Task 3: Kết nối và tự kết nối lại Socket Client
-
-- Chạy `GlobalSuccess.SocketServer` của Ân. Trong project `GlobalSuccess.Desktop` đã commit, thêm Socket Client bằng `TcpClient` và gọi `ConnectAsync` khi mở màn hình Chat (`MessageView`). Chạy WPF và server trên cùng máy để thử với `127.0.0.1:8085`.
+-, Loan đã có màn hình Chat MessageView.xaml. Việc tiếp theo là thêm Socket Client vào ứng dụng WPF để màn hình Chat có thể kết nối tới server của Ân.Trong project WPF, dùng TcpClient.ConnectAsync để kết nối khi mở màn hình Chat. Khi server hiện Accepted, phần kết nối ban đầu đã hoạt động. Mở hai phiên WPF để kiểm tra cả hai cùng kết nối được.`.
 - Mở hai cửa sổ WPF và kiểm tra server ghi `Accepted` cho cả hai. Dừng rồi chạy lại server để kiểm tra WPF tự kết nối lại mà giao diện vẫn phản hồi. Mã server này đủ để thử kết nối và kết nối lại. Nút **Gửi** sẽ nối ở task chat tiếp theo.
