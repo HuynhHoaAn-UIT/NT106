@@ -2,11 +2,11 @@
 
 **Phụ trách:** Hòa Ân  
 **Kế hoạch:** 19/10/2026 – 23/10/2026  
-**Phụ thuộc:** [Task 03 — Socket Server TCP nền tảng](task-03-socket-server.md). Ân có thể triển khai và kiểm thử độc lập với WPF của Loan và Web API của Bảo.
+**Triển khai:** Ân có thể làm và kiểm thử độc lập với WPF của Loan và Web API của Bảo.
 
 ## Phạm vi và đầu ra
 
-Task 04 mở rộng Socket Server để nhiều client giữ kết nối TCP cùng lúc. Vòng lặp nhận kết nối tiếp tục chạy trong khi mỗi client có tác vụ đọc riêng. Khi một client ngắt, server dọn kết nối đó và vẫn phục vụ các client khác.
+Socket Server tạo TCP listener, bind địa chỉ và cổng, lắng nghe rồi nhận kết nối. Task 04 bao gồm các bước nền tảng này và cho phép nhiều client giữ kết nối TCP cùng lúc. Vòng lặp nhận kết nối tiếp tục chạy trong khi mỗi client có tác vụ đọc riêng. Khi một client ngắt, server dọn kết nối đó và vẫn phục vụ các client khác.
 
 Đầu ra là mã C# cho `GlobalSuccess.SocketServer/Program.cs` và kịch bản kiểm thử trên cổng `8085`. Phần đọc dữ liệu hiện dùng để xác nhận từng kết nối hoạt động. Định dạng gói tin, phòng chat và broadcast thuộc các bước tiếp theo.
 
@@ -17,7 +17,7 @@ Task 04 mở rộng Socket Server để nhiều client giữ kết nối TCP cù
 
 ## Mã C# (.NET 10)
 
-Thay nội dung `GlobalSuccess.SocketServer/Program.cs` của Task 03:
+Nếu chưa có project, tạo project console bằng `dotnet new console -n GlobalSuccess.SocketServer -f net10.0`. Sau đó dùng mã dưới đây cho `GlobalSuccess.SocketServer/Program.cs`:
 
 ```csharp
 using System.Net;
