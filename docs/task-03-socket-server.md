@@ -21,7 +21,7 @@ Từ thư mục làm việc, tạo project console .NET 10 nếu chưa có:
 dotnet new console -n GlobalSuccess.SocketServer -f net10.0
 ```
 
-Thay nội dung `GlobalSuccess.SocketServer/Program.cs` bằng:
+`GlobalSuccess.SocketServer/Program.cs` :
 
 ```csharp
 using System.Net;
@@ -73,9 +73,8 @@ Terminal 2 trên cùng máy:
 Test-NetConnection 127.0.0.1 -Port 8085
 ```
 
-Đạt khi terminal server in `Listening on 127.0.0.1:8085`, client báo `TcpTestSucceeded : True`, server in `Accepted` kèm endpoint của client, lần chạy thứ hai được nhận và Ctrl+C dừng listener. Cổng TCP 8085 dùng cho kiểm thử Socket Server, tách khỏi cổng HTTP 5116 của API.
-
 ## Bàn giao để tích hợp
 Loan: Lấy code Task 03 để chạy Socket Server ở 127.0.0.1:8085, rồi dùng TcpClient trong WPF kết nối thử. Server hiện chỉ ghi log Accepted rồi đóng kết nối.
+
 Bảo: Dùng AuthController và JwtTokenService đã commit để phối hợp với Ân ở bước xác thực chat. Sau này WPF gửi JWT từ API đăng nhập, Socket Server của Ân kiểm tra token đó.
 
