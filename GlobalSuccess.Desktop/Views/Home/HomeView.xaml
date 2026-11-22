@@ -361,7 +361,7 @@
                     </Button>
 
                     <!-- ACCOUNT -->
-                    <Button Style="{StaticResource SidebarButtonStyle}">
+                    <Button Style="{StaticResource SidebarButtonStyle}" Click="BtnAccount_Click">
 
                         <StackPanel Orientation="Horizontal">
 

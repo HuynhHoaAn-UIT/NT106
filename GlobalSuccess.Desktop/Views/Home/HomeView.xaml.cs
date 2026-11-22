@@ -1,4 +1,6 @@
 ﻿
+using GlobalSuccess.Desktop.Views.Account;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace GlobalSuccess.Desktop.Views.Home
@@ -8,6 +10,10 @@ namespace GlobalSuccess.Desktop.Views.Home
         public HomeView()
         {
             InitializeComponent();
+        }
+        private void BtnAccount_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance?.NavigateTo(new AccountView());
         }
     }
 }
