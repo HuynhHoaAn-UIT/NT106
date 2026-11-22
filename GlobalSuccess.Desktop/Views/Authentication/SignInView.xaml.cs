@@ -85,7 +85,8 @@ namespace GlobalSuccess.Desktop.Views.Authentication
 
                         MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                        // TODO: Chuyển sang màn hình HomeView của bạn
+                        //Chuyển sang màn hình HomeView của bạn
+                        MainWindow.Instance?.NavigateTo(new Views.Home.HomeView());
                     }
                 }
                 else
