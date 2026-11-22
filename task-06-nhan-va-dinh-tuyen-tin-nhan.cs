@@ -19,6 +19,7 @@ internal sealed class ChatRouter
             string? endpoint = null;
             var client = new ChatClient(socket);
             Task writer = Task.CompletedTask;
+            await using var upload = new FileUpload();
 
             try
             {
@@ -30,9 +31,11 @@ internal sealed class ChatRouter
                 writer = client.WriteAsync(stream, session.Token);
 
                 byte[] length = new byte[sizeof(int)];
-                while (await stream.ReadAsync(length.AsMemory(0, 1), session.Token) != 0)
+                while (await SocketLimits.ReadFrameStartAsync(stream, length, upload.Active, session.Token) != 0)
                 {
-                    await stream.ReadExactlyAsync(length.AsMemory(1), session.Token);
+                    using var frameTimeout = CancellationTokenSource.CreateLinkedTokenSource(session.Token);
+                    frameTimeout.CancelAfter(SocketLimits.FrameTimeout);
+                    await stream.ReadExactlyAsync(length.AsMemory(1), frameTimeout.Token);
                     int size = BinaryPrimitives.ReadInt32BigEndian(length);
                     if (size is <= 0 or > MaxFrameSize)
                     {
@@ -40,13 +43,16 @@ internal sealed class ChatRouter
                     }
 
                     byte[] json = new byte[size];
-                    await stream.ReadExactlyAsync(json, session.Token);
-                    Route(client, json);
+                    await stream.ReadExactlyAsync(json, frameTimeout.Token);
+                    await RouteAsync(client, upload, json, session.Token);
                 }
             }
-            catch (OperationCanceledException) when (shutdown.IsCancellationRequested)
+            catch (OperationCanceledException)
             {
-                // Server đang dừng.
+                if (!shutdown.IsCancellationRequested)
+                {
+                    Console.WriteLine($"Read timeout for {endpoint}");
+                }
             }
             catch (ObjectDisposedException)
             {
@@ -67,7 +73,7 @@ internal sealed class ChatRouter
         }
     }
 
-    private void Route(ChatClient client, byte[] json)
+    private async Task RouteAsync(ChatClient client, FileUpload upload, byte[] json, CancellationToken cancellationToken)
     {
         string? requestId = null;
 
@@ -84,6 +90,23 @@ internal sealed class ChatRouter
 
             string? type = header.GetProperty("type").GetString();
             JsonElement body = packet.RootElement.GetProperty("body");
+            if (type is FileProtocol.Begin or FileProtocol.Chunk or FileProtocol.End)
+            {
+                try
+                {
+                    object reply = await upload.HandleAsync(type, body, cancellationToken);
+                    client.Send(Frame("FILE_RESULT", requestId, reply));
+                }
+                catch (Exception error) when (error is FormatException or JsonException or
+                    KeyNotFoundException or InvalidOperationException or IOException or UnauthorizedAccessException)
+                {
+                    await upload.DisposeAsync();
+                    client.Send(Frame("ERROR", requestId, new { message = "Upload failed. Start again with FILE_BEGIN." }));
+                }
+
+                return;
+            }
+
             string? roomId = body.GetProperty("roomId").GetString();
             if (string.IsNullOrWhiteSpace(roomId) || roomId.Length > 64)
             {

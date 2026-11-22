@@ -24,8 +24,15 @@ try
 
     while (!shutdown.IsCancellationRequested)
     {
+        clientTasks.RemoveAll(task => task.IsCompletedSuccessfully);
+        if (clientTasks.Count >= SocketLimits.MaxClients)
+        {
+            Task completedClient = await Task.WhenAny(clientTasks).WaitAsync(shutdown.Token);
+            await completedClient;
+            continue;
+        }
+
         TcpClient client = await listener.AcceptTcpClientAsync(shutdown.Token);
-        clientTasks.RemoveAll(task => task.IsCompleted);
         clientTasks.Add(router.HandleClientAsync(client, shutdown.Token));
     }
 }
