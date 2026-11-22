@@ -104,3 +104,17 @@ static async Task HandleClientAsync(TcpClient client, CancellationToken cancella
 
 -, Loan đã có màn hình Chat MessageView.xaml. Việc tiếp theo là thêm Socket Client vào ứng dụng WPF để màn hình Chat có thể kết nối tới server của Ân.Trong project WPF, dùng TcpClient.ConnectAsync để kết nối khi mở màn hình Chat. Khi server hiện Accepted, phần kết nối ban đầu đã hoạt động. Mở hai phiên WPF để kiểm tra cả hai cùng kết nối được.`.
 - Mở hai cửa sổ WPF và kiểm tra server ghi `Accepted` cho cả hai. Dừng rồi chạy lại server để kiểm tra WPF tự kết nối lại mà giao diện vẫn phản hồi. Mã server này đủ để thử kết nối và kết nối lại. Nút **Gửi** sẽ nối ở task chat tiếp theo.
+
+
+## Chạy bản tích hợp Task 05 và 06
+
+Từ thư mục gốc repo, chạy `dotnet run --project GlobalSuccess.SocketServer`. Khi mở `MessageView`, WPF gọi `await client.ConnectAsync("127.0.0.1", 8085)` trên cùng máy. Mở hai phiên WPF và xem server ghi `Accepted` cho cả hai.
+
+Sau khi kết nối, WPF gửi từng frame theo Task 01. Bốn byte đầu là độ dài JSON UTF-8 theo big-endian. WPF đọc đúng số byte của mỗi frame và giữ vòng đọc chạy trong suốt phiên chat.
+
+```json
+{"header":{"version":1,"type":"CHAT_JOIN","requestId":"1"},"body":{"roomId":"hoc-bong-1"}}
+{"header":{"version":1,"type":"CHAT_SEND","requestId":"2"},"body":{"roomId":"hoc-bong-1","text":"Chào mọi người!"}}
+```
+
+Server trả `CHAT_JOIN_RESULT` cho client vừa vào phòng. Khi gửi tin, cả người gửi và các client trong cùng phòng nhận `CHAT_MESSAGE` với `body.roomId` và `body.text`. Thử cho hai client vào cùng phòng, gửi từ A và xem B nhận tin. Sau đó cho B sang phòng khác và kiểm tra B không nhận tin của phòng cũ. WPF cần gửi lại `CHAT_JOIN` sau khi kết nối lại.
