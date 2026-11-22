@@ -1,3 +1,7 @@
+// Chạy từ thư mục gốc: dotnet run --project GlobalSuccess.SocketServer.csproj
+// Khi mở MessageView, WPF gọi await client.ConnectAsync("127.0.0.1", 8085).
+// Mở hai phiên WPF trên cùng máy và kiểm tra server ghi Accepted cho cả hai.
+
 using System.Net;
 using System.Net.Sockets;
 

@@ -1,3 +1,7 @@
+// Mỗi gói gồm 4 byte độ dài big-endian và JSON UTF-8 (xem Task 01).
+// WPF gửi CHAT_JOIN với body.roomId, rồi CHAT_SEND với body.roomId và body.text.
+// Khi kết nối lại, WPF gửi lại CHAT_JOIN. Cùng phòng sẽ nhận CHAT_MESSAGE.
+
 using System.Buffers.Binary;
 using System.Net.Sockets;
 using System.Text.Json;
