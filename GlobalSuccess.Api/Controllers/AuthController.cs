@@ -13,14 +13,16 @@ namespace GlobalSuccess.Api.Controllers
     {
         private readonly IConfiguration _config;
         private readonly JwtTokenService _jwtService;
+        private readonly EmailService _emailService;
         private readonly string _connectionString;
         // Danh sách lưu tạm các mã OTP trong RAM
         private static List<OtpRecord> _otpList = new List<OtpRecord>();
 
-        public AuthController(IConfiguration config, JwtTokenService jwtService)
+        public AuthController(IConfiguration config, JwtTokenService jwtService, EmailService emailService)
         {
             _config = config;
             _jwtService = jwtService;
+            _emailService = emailService;
             // Đọc chuỗi kết nối MySQL Azure từ appsettings.json
             _connectionString = _config.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Chưa cấu hình ConnectionStrings:DefaultConnection trong appsettings.json");
@@ -143,6 +145,16 @@ namespace GlobalSuccess.Api.Controllers
             Console.WriteLine("==================================================");
             Console.WriteLine($"[OTP QUÊN MẬT KHẨU] Email: {request.Email} -> MÃ OTP: {otp}");
             Console.WriteLine("==================================================");
+
+            try
+            {
+                await _emailService.SendOtpAsync(request.Email.Trim(), otp);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[AZURE EMAIL ERROR] {ex.Message}");
+                return StatusCode(503, "Không gửi được OTP qua Azure Email: " + ex.Message);
+            }
 
             return Ok("Mã xác thực OTP đã được gửi!");
         }

@@ -39,7 +39,7 @@ namespace GlobalSuccess.Desktop.Views.Authentication
                     // Chuyển sang màn hình xác thực OTP và gửi kèm email vừa nhập
                     MainWindow.Instance?.NavigateTo(new VerifyOtpView(email));
 
-                    MessageBox.Show("Mã OTP đã được gửi!\n(Bạn hãy nhìn cửa sổ đen Terminal của Server API để lấy mã)",
+                    MessageBox.Show("Mã OTP đã được gửi!\n(Hãy kiểm tra hộp thư đến)",
                                     "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else

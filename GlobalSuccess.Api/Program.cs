@@ -44,6 +44,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
