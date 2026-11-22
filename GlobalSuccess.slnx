@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GlobalSuccess.Api/GlobalSuccess.Api.csproj" />
+  <Project Path="GlobalSuccess.Desktop/GlobalSuccess.Desktop.csproj" />
+</Solution>
