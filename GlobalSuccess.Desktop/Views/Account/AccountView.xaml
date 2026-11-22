@@ -207,7 +207,7 @@
                 <StackPanel Grid.Row="1"
                             Margin="10,0,10,10">
 
-                    <Button Style="{StaticResource SidebarButtonStyle}">
+                    <Button Style="{StaticResource SidebarButtonStyle}" Click="BtnHome_Click">
                         <StackPanel Orientation="Horizontal">
                             <svgc:SvgViewbox
                                 Source="/Assets/Icons/compass.svg"
@@ -562,7 +562,8 @@
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     Width="125"
                                     Height="38"
-                                    VerticalAlignment="Center"/>
+                                    VerticalAlignment="Center"
+                                    Click="BtnEditProfile_Click"/>
                         </Grid>
                     </Border>
 
