@@ -84,6 +84,42 @@ namespace GlobalSuccess.Api.Controllers
 
             return Ok(new { message = "Cập nhật hồ sơ thành công!" });
         }
+
+        // 3. API TẢI LÊN ẢNH ĐẠI DIỆN: POST /api/user/upload-avatar
+        [HttpPost("upload-avatar")]
+        public async Task<IActionResult> UploadAvatar(IFormFile? file)
+        {
+            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdStr) || !long.TryParse(userIdStr, out long userId))
+                return Unauthorized("Token không hợp lệ.");
+
+            file ??= Request.Form.Files.FirstOrDefault();
+            if (file == null || file.Length == 0)
+                return BadRequest("Vui lòng chọn một file ảnh hợp lệ.");
+
+            if (file.Length > 5 * 1024 * 1024)
+                return BadRequest("Dung lượng ảnh không được vượt quá 5MB.");
+
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedExtensions.Contains(extension))
+                return BadRequest("Định dạng file không được hỗ trợ. Vui lòng chọn ảnh JPG, PNG hoặc WEBP.");
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "avatars");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            string uniqueFileName = $"avatar_{userId}_{DateTime.UtcNow.Ticks}{extension}";
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            string avatarUrl = $"{Request.Scheme}://{Request.Host}/uploads/avatars/{uniqueFileName}";
+            return Ok(new { avatarUrl });
+        }
     }
 
     // DTO (Data Transfer Object) dùng để trả về thông tin hồ sơ an toàn (không lộ password)

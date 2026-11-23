@@ -46,8 +46,15 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<EmailService>();
 
+var wwwroot = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
+if (!Directory.Exists(wwwroot))
+{
+    Directory.CreateDirectory(wwwroot);
+}
+
 var app = builder.Build();
 
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 

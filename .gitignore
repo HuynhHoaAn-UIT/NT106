@@ -43,3 +43,7 @@ appsettings.Local.json
 .env
 .env.*
 !.env.example
+
+# User uploaded files
+GlobalSuccess.Api/wwwroot/uploads/avatars/*
+!GlobalSuccess.Api/wwwroot/uploads/avatars/.gitkeep
