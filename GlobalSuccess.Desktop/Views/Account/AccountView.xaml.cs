@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using GlobalSuccess.Desktop.Services;
 
 namespace GlobalSuccess.Desktop.Views.Account
@@ -28,14 +30,23 @@ namespace GlobalSuccess.Desktop.Views.Account
                 if (response.IsSuccessStatusCode)
                 {
                     var profile = await response.Content.ReadFromJsonAsync<UserProfileResponse>();
-                    if (profile != null && !string.IsNullOrWhiteSpace(profile.FullName))
+                    if (profile != null)
                     {
-                        txtProfileFullName.Text = profile.FullName;
-                        txtSidebarFullName.Text = profile.FullName;
+                        if (!string.IsNullOrWhiteSpace(profile.FullName))
+                        {
+                            txtProfileFullName.Text = profile.FullName;
+                            txtSidebarFullName.Text = profile.FullName;
 
-                        string initials = GetInitials(profile.FullName);
-                        txtProfileAvatar.Text = initials;
-                        txtSidebarAvatar.Text = initials;
+                            string initials = GetInitials(profile.FullName);
+                            txtProfileAvatar.Text = initials;
+                            txtSidebarAvatar.Text = initials;
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(profile.AvatarUrl))
+                        {
+                            SetAvatarImage(imgProfileAvatar, txtProfileAvatar, profile.AvatarUrl);
+                            SetAvatarImage(imgSidebarAvatar, txtSidebarAvatar, profile.AvatarUrl);
+                        }
                     }
                 }
             }
@@ -43,6 +54,31 @@ namespace GlobalSuccess.Desktop.Views.Account
             {
                 // Bỏ qua lỗi mạng khi tải hồ sơ nền
             }
+        }
+
+        // Hiển thị ảnh đại diện hoặc fallback về chữ cái viết tắt
+        private void SetAvatarImage(ImageBrush brush, TextBlock textBlock, string? url)
+        {
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                try
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(url, UriKind.Absolute);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    brush.ImageSource = bitmap;
+                    textBlock.Visibility = Visibility.Collapsed;
+                    return;
+                }
+                catch
+                {
+                    // Fallback ve chu cai viet tat neu khong tai duoc anh
+                }
+            }
+            brush.ImageSource = null;
+            textBlock.Visibility = Visibility.Visible;
         }
 
         // Trích xuất 2 chữ cái đầu đại diện avatar (VD: Nguyễn Kim Loan -> KL)

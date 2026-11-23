@@ -333,20 +333,29 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Ellipse Width="34"
-                                     Height="34"
-                                     Fill="#D8E2F1"
-                                     VerticalAlignment="Center"/>
+                            <Grid Grid.Column="0">
+                                <Ellipse Width="34"
+                                         Height="34"
+                                         Fill="#D8E2F1"
+                                         VerticalAlignment="Center"/>
 
-                            <TextBlock x:Name="txtSidebarAvatar"
-                                       Grid.Column="0"
-                                       Text="KL"
-                                       FontFamily="Inter"
-                                       FontSize="11"
-                                       FontWeight="Bold"
-                                       Foreground="#211B70"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                <TextBlock x:Name="txtSidebarAvatar"
+                                           Text="KL"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           FontWeight="Bold"
+                                           Foreground="#211B70"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+
+                                <Ellipse Width="34"
+                                         Height="34"
+                                         VerticalAlignment="Center">
+                                    <Ellipse.Fill>
+                                        <ImageBrush x:Name="imgSidebarAvatar" Stretch="UniformToFill"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                            </Grid>
 
                             <StackPanel Grid.Column="1"
                                         VerticalAlignment="Center"
@@ -521,20 +530,29 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- AVATAR -->
-                                <Ellipse Width="46"
-                                         Height="46"
-                                         Fill="#D8E2F1"
-                                         VerticalAlignment="Center"/>
+                                <Grid Grid.Column="0">
+                                    <Ellipse Width="46"
+                                             Height="46"
+                                             Fill="#D8E2F1"
+                                             VerticalAlignment="Center"/>
 
-                                <TextBlock x:Name="txtProfileAvatar"
-                                           Grid.Column="0"
-                                           Text="KL"
-                                           FontFamily="Inter"
-                                           FontSize="15"
-                                           FontWeight="Bold"
-                                           Foreground="#211B70"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="txtProfileAvatar"
+                                               Text="KL"
+                                               FontFamily="Inter"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#211B70"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+
+                                    <Ellipse Width="46"
+                                             Height="46"
+                                             VerticalAlignment="Center">
+                                        <Ellipse.Fill>
+                                            <ImageBrush x:Name="imgProfileAvatar" Stretch="UniformToFill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </Grid>
 
                                 <!-- USER INFO -->
                                 <StackPanel Grid.Column="1"
