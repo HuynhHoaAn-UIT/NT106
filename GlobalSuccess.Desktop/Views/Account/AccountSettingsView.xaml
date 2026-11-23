@@ -533,13 +533,6 @@
                                 Background="#211B70"
                                 Foreground="White"
                                 Margin="0,0,6,0"/>
-
-                        <Button Content="Hiển thị"
-                                Style="{StaticResource TabButtonStyle}"
-                                Margin="0,0,6,0"/>
-
-                        <Button Content="Tài khoản"
-                                Style="{StaticResource TabButtonStyle}"/>
                     </StackPanel>
 
                     <Border Height="1"
