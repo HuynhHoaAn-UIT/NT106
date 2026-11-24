@@ -24,6 +24,23 @@ namespace GlobalSuccess.Desktop.Views.Account
         // Tải thông tin hồ sơ người dùng từ REST API
         private async Task LoadUserProfileAsync()
         {
+            // Hiển thị ngay từ bộ nhớ đệm nếu đã có
+            if (!string.IsNullOrWhiteSpace(ApiClient.CurrentFullName))
+            {
+                txtProfileFullName.Text = ApiClient.CurrentFullName;
+                txtSidebarFullName.Text = ApiClient.CurrentFullName;
+                string initials = GetInitials(ApiClient.CurrentFullName);
+                txtProfileAvatar.Text = initials;
+                txtSidebarAvatar.Text = initials;
+                txtTopbarAvatar.Text = initials;
+            }
+            if (!string.IsNullOrWhiteSpace(ApiClient.CurrentAvatarUrl))
+            {
+                SetAvatarImage(imgProfileAvatar, txtProfileAvatar, ApiClient.CurrentAvatarUrl);
+                SetAvatarImage(imgSidebarAvatar, txtSidebarAvatar, ApiClient.CurrentAvatarUrl);
+                SetAvatarImage(imgTopbarAvatar, txtTopbarAvatar, ApiClient.CurrentAvatarUrl);
+            }
+
             try
             {
                 var response = await ApiClient.Http.GetAsync("api/user/profile");
@@ -34,18 +51,22 @@ namespace GlobalSuccess.Desktop.Views.Account
                     {
                         if (!string.IsNullOrWhiteSpace(profile.FullName))
                         {
+                            ApiClient.CurrentFullName = profile.FullName;
                             txtProfileFullName.Text = profile.FullName;
                             txtSidebarFullName.Text = profile.FullName;
 
                             string initials = GetInitials(profile.FullName);
                             txtProfileAvatar.Text = initials;
                             txtSidebarAvatar.Text = initials;
+                            txtTopbarAvatar.Text = initials;
                         }
 
                         if (!string.IsNullOrWhiteSpace(profile.AvatarUrl))
                         {
+                            ApiClient.CurrentAvatarUrl = profile.AvatarUrl;
                             SetAvatarImage(imgProfileAvatar, txtProfileAvatar, profile.AvatarUrl);
                             SetAvatarImage(imgSidebarAvatar, txtSidebarAvatar, profile.AvatarUrl);
+                            SetAvatarImage(imgTopbarAvatar, txtTopbarAvatar, profile.AvatarUrl);
                         }
                     }
                 }

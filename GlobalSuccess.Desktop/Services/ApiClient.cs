@@ -11,6 +11,8 @@ namespace GlobalSuccess.Desktop.Services
         };
 
         public static string? SavedToken { get; private set; }
+        public static string? CurrentAvatarUrl { get; set; }
+        public static string? CurrentFullName { get; set; }
 
         // Gọi hàm này sau khi đăng nhập thành công
         public static void SetBearerToken(string token)
@@ -24,6 +26,8 @@ namespace GlobalSuccess.Desktop.Services
         public static void ClearToken()
         {
             SavedToken = null;
+            CurrentAvatarUrl = null;
+            CurrentFullName = null;
             Http.DefaultRequestHeaders.Authorization = null;
         }
     }

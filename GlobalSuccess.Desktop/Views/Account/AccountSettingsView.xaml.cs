@@ -29,6 +29,25 @@ namespace GlobalSuccess.Desktop.Views.Account
         // Tải thông tin hồ sơ hiện tại lên form cài đặt
         private async Task LoadUserProfileAsync()
         {
+            // Hiển thị ngay từ bộ nhớ đệm nếu đã có
+            if (!string.IsNullOrWhiteSpace(ApiClient.CurrentFullName))
+            {
+                txtFullName.Text = ApiClient.CurrentFullName;
+                txtCardFullName.Text = ApiClient.CurrentFullName;
+                txtSidebarFullName.Text = ApiClient.CurrentFullName;
+                string initials = GetInitials(ApiClient.CurrentFullName);
+                txtCardAvatar.Text = initials;
+                txtSidebarAvatar.Text = initials;
+                txtTopbarAvatar.Text = initials;
+            }
+            if (!string.IsNullOrWhiteSpace(ApiClient.CurrentAvatarUrl))
+            {
+                _currentAvatarUrl = ApiClient.CurrentAvatarUrl;
+                SetAvatarImage(imgCardAvatar, txtCardAvatar, _currentAvatarUrl);
+                SetAvatarImage(imgSidebarAvatar, txtSidebarAvatar, _currentAvatarUrl);
+                SetAvatarImage(imgTopbarAvatar, txtTopbarAvatar, _currentAvatarUrl);
+            }
+
             try
             {
                 var response = await ApiClient.Http.GetAsync("api/user/profile");
@@ -39,6 +58,7 @@ namespace GlobalSuccess.Desktop.Views.Account
                     {
                         if (!string.IsNullOrWhiteSpace(profile.FullName))
                         {
+                            ApiClient.CurrentFullName = profile.FullName;
                             txtFullName.Text = profile.FullName;
                             txtCardFullName.Text = profile.FullName;
                             txtSidebarFullName.Text = profile.FullName;
@@ -46,6 +66,7 @@ namespace GlobalSuccess.Desktop.Views.Account
                             string initials = GetInitials(profile.FullName);
                             txtCardAvatar.Text = initials;
                             txtSidebarAvatar.Text = initials;
+                            txtTopbarAvatar.Text = initials;
                         }
 
                         if (!string.IsNullOrWhiteSpace(profile.Email))
@@ -56,9 +77,11 @@ namespace GlobalSuccess.Desktop.Views.Account
 
                         if (!string.IsNullOrWhiteSpace(profile.AvatarUrl))
                         {
+                            ApiClient.CurrentAvatarUrl = profile.AvatarUrl;
                             _currentAvatarUrl = profile.AvatarUrl;
                             SetAvatarImage(imgCardAvatar, txtCardAvatar, _currentAvatarUrl);
                             SetAvatarImage(imgSidebarAvatar, txtSidebarAvatar, _currentAvatarUrl);
+                            SetAvatarImage(imgTopbarAvatar, txtTopbarAvatar, _currentAvatarUrl);
                         }
                     }
                 }
@@ -104,8 +127,10 @@ namespace GlobalSuccess.Desktop.Views.Account
                         if (result != null && !string.IsNullOrWhiteSpace(result.AvatarUrl))
                         {
                             _currentAvatarUrl = result.AvatarUrl;
+                            ApiClient.CurrentAvatarUrl = _currentAvatarUrl;
                             SetAvatarImage(imgCardAvatar, txtCardAvatar, _currentAvatarUrl);
                             SetAvatarImage(imgSidebarAvatar, txtSidebarAvatar, _currentAvatarUrl);
+                            SetAvatarImage(imgTopbarAvatar, txtTopbarAvatar, _currentAvatarUrl);
                             MessageBox.Show("Tải ảnh lên thành công! Nhấn 'Lưu' để hoàn tất cập nhật.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }
@@ -145,6 +170,8 @@ namespace GlobalSuccess.Desktop.Views.Account
 
                 if (response.IsSuccessStatusCode)
                 {
+                    ApiClient.CurrentFullName = fullName;
+                    ApiClient.CurrentAvatarUrl = _currentAvatarUrl;
                     MessageBox.Show("Cập nhật thông tin hồ sơ thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     MainWindow.Instance?.NavigateTo(new AccountView());
                 }
