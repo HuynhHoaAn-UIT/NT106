@@ -123,6 +123,11 @@ namespace GlobalSuccess.Desktop.Views.Account
         {
             MainWindow.Instance?.NavigateTo(new AccountSettingsView());
         }
+
+        private void BtnSupport_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance?.NavigateTo(new HelpCenterView());
+        }
     }
 
     public class UserProfileResponse

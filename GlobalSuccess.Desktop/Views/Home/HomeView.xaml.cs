@@ -112,5 +112,10 @@ namespace GlobalSuccess.Desktop.Views.Home
         {
             MainWindow.Instance?.NavigateTo(new AccountView());
         }
+
+        private void BtnSupport_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance?.NavigateTo(new HelpCenterView());
+        }
     }
 }

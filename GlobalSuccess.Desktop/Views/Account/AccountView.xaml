@@ -310,7 +310,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Style="{StaticResource SidebarButtonStyle}">
+                        <Button Style="{StaticResource SidebarButtonStyle}" Click="BtnSupport_Click">
                             <StackPanel Orientation="Horizontal">
                                 <svgc:SvgViewbox
                                     Source="/Assets/Icons/circle-help.svg"
@@ -781,7 +781,7 @@
                                     </Button>
 
                                     <!-- SUPPORT -->
-                                    <Button Style="{StaticResource UtilityItemButtonStyle}">
+                                    <Button Style="{StaticResource UtilityItemButtonStyle}" Click="BtnSupport_Click">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="24"/>

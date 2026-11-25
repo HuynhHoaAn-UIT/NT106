@@ -453,7 +453,7 @@
 
                     </Button>
 
-                    <Button Style="{StaticResource SidebarButtonStyle}">
+                    <Button Style="{StaticResource SidebarButtonStyle}" Click="BtnSupport_Click">
 
                         <StackPanel Orientation="Horizontal">
 
