@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             Loaded="UserControl_Loaded"
              MinWidth="1000"
              MinHeight="700">
 
@@ -361,7 +362,7 @@
                     </Button>
 
                     <!-- ACCOUNT -->
-                    <Button Style="{StaticResource SidebarButtonStyle}">
+                    <Button Style="{StaticResource SidebarButtonStyle}" Click="BtnAccount_Click">
 
                         <StackPanel Orientation="Horizontal">
 
@@ -452,7 +453,7 @@
 
                     </Button>
 
-                    <Button Style="{StaticResource SidebarButtonStyle}">
+                    <Button Style="{StaticResource SidebarButtonStyle}" Click="BtnSupport_Click">
 
                         <StackPanel Orientation="Horizontal">
 
@@ -482,27 +483,37 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- AVATAR PLACEHOLDER -->
-                        <Ellipse Grid.Column="0"
-                                 Width="34"
-                                 Height="34"
-                                 Fill="#D8E2F1"
-                                 VerticalAlignment="Center"/>
+                        <!-- SIDEBAR AVATAR -->
+                        <Grid Grid.Column="0">
+                            <Ellipse Width="34"
+                                     Height="34"
+                                     Fill="#D8E2F1"
+                                     VerticalAlignment="Center"/>
 
-                        <TextBlock Grid.Column="0"
-                                   Text="KL"
-                                   FontFamily="Inter"
-                                   FontSize="11"
-                                   FontWeight="Bold"
-                                   Foreground="#211B70"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                            <TextBlock x:Name="txtSidebarAvatar"
+                                       Text="KL"
+                                       FontFamily="Inter"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#211B70"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+
+                            <Ellipse Width="34"
+                                     Height="34"
+                                     VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="imgSidebarAvatar" Stretch="UniformToFill"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Grid>
 
                         <StackPanel Grid.Column="1"
                                     VerticalAlignment="Center"
                                     Margin="8,0,0,0">
 
-                            <TextBlock Text="Nguyễn Kim Loan"
+                            <TextBlock x:Name="txtSidebarFullName"
+                                       Text="Nguyễn Kim Loan"
                                        FontFamily="Inter"
                                        FontSize="10"
                                        FontWeight="SemiBold"
@@ -628,13 +639,30 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"/>
 
-                    <!-- AVATAR -->
-                    <Ellipse Grid.Column="3"
-                             Width="30"
-                             Height="30"
-                             Fill="#D8E2F1"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center"/>
+                    <!-- TOPBAR AVATAR -->
+                    <Grid Grid.Column="3"
+                          Width="30"
+                          Height="30"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+                        <Ellipse Width="30"
+                                 Height="30"
+                                 Fill="#D8E2F1"/>
+                        <TextBlock x:Name="txtTopbarAvatar"
+                                   Text="KL"
+                                   FontFamily="Inter"
+                                   FontSize="10"
+                                   FontWeight="Bold"
+                                   Foreground="#211B70"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Ellipse Width="30"
+                                 Height="30">
+                            <Ellipse.Fill>
+                                <ImageBrush x:Name="imgTopbarAvatar" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Grid>
 
                 </Grid>
 
